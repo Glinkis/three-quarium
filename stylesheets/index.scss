@@ -1,0 +1,17 @@
+$mainColor1: #E0FFB3;
+$mainColor2: #61C791;
+$mainColor3: #31797D;
+$mainColor4: #2A2F36;
+$mainColor5: #F23C55;
+
+body {
+  padding: 0;
+  margin: 0;
+}
+
+#three-quarium {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  background-color: $mainColor4;
+}
