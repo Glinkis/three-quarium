@@ -1,20 +1,24 @@
-// @flow
+/**
+ * @flow
+ * @author: Victor Glindås
+ */
 import * as THREE from 'three';
-import clamp from './math/clamp';
+import clamp from '../math/clamp';
 import {
   getEventByType,
   getEventDeltaMovement,
   getEventTouchesDeltaDistance,
   getEventMoveByType,
   getEventEndByType,
-} from './EventHelper';
+} from '../helpers/EventHelper';
 
 const MAGNITUDE_ROTATION = 0.004;
 const MAGNITUDE_PANNING = 0.004;
 const MAGNITUDE_ZOOM = 0.004;
 
-export default class CameraControls {
-  main: Object;
+export default class OrbitalCamera extends THREE.PerspectiveCamera {
+  eventElement: ?HTMLElement;
+
   distance: number;
   centerPoint: THREE.Vector3;
 
@@ -24,16 +28,13 @@ export default class CameraControls {
   panX: number;
   panY: number;
 
-  pvtZoom: number;
-  zoomMax: ?number;
-  zoomMin: ?number;
-
   onMouseWheel: () => void;
   onStartEvent: () => void;
 
-  constructor(main: Object) {
-    this.main = main;
-    this.distance = this.main.size * 2.5;
+  constructor() {
+    super();
+
+    this.distance = 100;
     this.centerPoint = new THREE.Vector3();
 
     this.rotationX = 0;
@@ -42,18 +43,14 @@ export default class CameraControls {
     this.panX = 0;
     this.panY = 0;
 
-    this.zoom = this.main.camera.zoom;
-    this.zoomMax = 5;
-    this.zoomMin = 0.1;
+    this.zoom = 1;
+    this.zoomMax = 4;
+    this.zoomMin = 1;
 
-    this.updateMainCamera();
+    this.update();
 
     this.onMouseWheel = this.onMouseWheel.bind(this);
     this.onStartEvent = this.onStartEvent.bind(this);
-
-    main.element.addEventListener('mousedown', this.onStartEvent);
-    main.element.addEventListener('touchstart', this.onStartEvent);
-    main.element.addEventListener('mousewheel', this.onMouseWheel);
   }
 
   onMouseWheel(event: WheelEvent): void {
@@ -69,6 +66,7 @@ export default class CameraControls {
       delta = event.detail;
     }
     this.zoom += delta * MAGNITUDE_ZOOM;
+    this.updateProjectionMatrix();
   }
 
   onStartEvent(startEvent: any): void {
@@ -107,7 +105,7 @@ export default class CameraControls {
         this.rotationY = rotationCompoundY + (movementDelta.y * MAGNITUDE_ROTATION);
       }
 
-      this.updateMainCamera();
+      this.update();
     };
 
     const onEventEnd = () => {
@@ -125,12 +123,24 @@ export default class CameraControls {
 
   set zoom(value: number): void {
     this.pvtZoom = clamp(value, this.zoomMin, this.zoomMax);
-    this.main.camera.zoom = this.zoom;
-    this.main.camera.updateProjectionMatrix();
   }
 
-  updateMainCamera(): void {
-    this.main.camera.position.set(
+  setEventElement(element: HTMLElement) {
+    if (this.eventElement != null) {
+      this.eventElement.removeEventListener('mousedown', this.onStartEvent);
+      this.eventElement.removeEventListener('touchstart', this.onStartEvent);
+      this.eventElement.removeEventListener('mousewheel', this.onMouseWheel);
+    }
+
+    element.addEventListener('mousedown', this.onStartEvent);
+    element.addEventListener('touchstart', this.onStartEvent);
+    element.addEventListener('mousewheel', this.onMouseWheel);
+
+    this.eventElement = element;
+  }
+
+  update(): void {
+    this.position.set(
       this.centerPoint.x + (this.distance * Math.cos(this.rotationY) * Math.cos(this.rotationX)),
       this.centerPoint.y + (this.distance * Math.sin(this.rotationY)),
       this.centerPoint.z + (this.distance * Math.cos(this.rotationY) * Math.sin(this.rotationX)),
@@ -138,25 +148,22 @@ export default class CameraControls {
 
     this.correctCameraUpVector();
 
-    this.main.camera.lookAt(this.centerPoint);
-    this.main.camera.translateX(-this.panX);
-    this.main.camera.translateY(this.panY);
+    this.lookAt(this.centerPoint);
+    this.translateX(-this.panX);
+    this.translateY(this.panY);
   }
 
   correctCameraUpVector(): void {
-    const camera = this.main.camera;
-    const up = this.centerPoint.clone();
+    this.up = this.centerPoint.clone();
 
-    up.y += Math.cos(this.rotationY);
+    this.up.y += Math.cos(this.rotationY);
 
     let verticalPI = this.rotationY % Math.PI;
     verticalPI = Math.abs(verticalPI) - (Math.PI / 2);
 
     if (verticalPI < 0.5 && verticalPI > -0.5) {
-      up.x -= (Math.cos(this.rotationX) * camera.position.y);
-      up.z -= (Math.sin(this.rotationX) * camera.position.y);
+      this.up.x -= (Math.cos(this.rotationX) * this.position.y);
+      this.up.z -= (Math.sin(this.rotationX) * this.position.y);
     }
-
-    camera.up = up;
   }
 }

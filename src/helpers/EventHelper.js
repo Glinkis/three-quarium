@@ -1,18 +1,21 @@
-// @flow
+/**
+ * @flow
+ * @author: Victor Glindås
+ */
 type PositionEvent = MouseEvent | Touch;
 
 const DISTANCE_THRESHOLD = 4;
 
-export function getEventByType(event: MouseEvent | TouchEvent, touchIndex: number = 0): MouseEvent | Touch {
-  return (event instanceof TouchEvent) ? event.touches[touchIndex] : event;
+export function getEventByType(event: any, touchIndex: number = 0): MouseEvent | Touch {
+  return event.touches != null ? event.touches[touchIndex] : event;
 }
 
-export function getEventMoveByType(event: MouseEvent | TouchEvent) {
-  return (event instanceof TouchEvent) ? 'touchmove' : 'mousemove';
+export function getEventMoveByType(event: any) {
+  return event.touches != null ? 'touchmove' : 'mousemove';
 }
 
-export function getEventEndByType(event: MouseEvent | TouchEvent) {
-  return (event instanceof TouchEvent) ? 'touchend' : 'mouseup';
+export function getEventEndByType(event: any) {
+  return event.touches != null ? 'touchend' : 'mouseup';
 }
 
 export function getEventsDistance(event0: PositionEvent, event1: PositionEvent): number {
@@ -21,13 +24,19 @@ export function getEventsDistance(event0: PositionEvent, event1: PositionEvent):
   return Math.sqrt((distanceX * distanceX) + (distanceY * distanceY));
 }
 
-export function getEventDeltaMovement(startEvent: PositionEvent, endEvent: PositionEvent): { x:number, y:number } {
+export function getEventDeltaMovement(
+  startEvent: PositionEvent,
+  endEvent: PositionEvent,
+): { x:number, y:number } {
   const x = endEvent.pageX - startEvent.pageX;
   const y = endEvent.pageY - startEvent.pageY;
   return { x, y };
 }
 
-export function getEventTouchesDeltaDistance(startTouches: Array<Touch>, endTouches: Array<Touch>): number {
+export function getEventTouchesDeltaDistance(
+  startTouches: Array<Touch>,
+  endTouches: Array<Touch>,
+): number {
   const startDistance = getEventsDistance(startTouches[0], startTouches[1]);
   const endDistance = getEventsDistance(endTouches[0], endTouches[1]);
   return startDistance - endDistance;
