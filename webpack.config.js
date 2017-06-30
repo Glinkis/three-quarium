@@ -1,11 +1,10 @@
 const webpack = require('webpack');
+const path = require('path');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const yargs = require('yargs');
-// noinspection JSUnresolvedVariable
+const env = require('yargs').argv.mode;
 const UglifyJsPlugin = webpack.optimize.UglifyJsPlugin;
-// noinspection JSUnresolvedVariable
-const env = yargs.argv.mode;
+
 const plugins = [
   new HtmlWebpackPlugin({
     title: 'three-quarium',
@@ -27,15 +26,18 @@ if (env === 'build') {
 }
 
 module.exports = {
-  entry: `${__dirname}/src`,
+  entry: path.resolve(__dirname, 'src/index.ts'),
   output: {
-    path: `${__dirname}/build`,
+    path: path.resolve(__dirname, 'build'),
     filename: `[name]${appendix}`,
+  },
+  resolve: {
+    extensions: ['', '.ts', '.js'],
   },
   devtool,
   module: {
     loaders: [
-      { test: /\.js$/, loader: 'babel-loader', include: /src/ },
+      { test: /\.(ts|js)$/, loader: 'awesome-typescript-loader', include: /src/ },
       { test: /\.scss$/, loaders: ['style', 'css?sourceMaps', 'sass?sourceMaps'], include: /stylesheets/ },
     ],
   },
