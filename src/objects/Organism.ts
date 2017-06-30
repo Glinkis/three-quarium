@@ -25,7 +25,7 @@ export default class Organism extends THREE.Mesh {
     this.velocity = 0.25;
     this.position.copy(this.simulation.getRandomPosition());
     randomize(this.rotation);
-    this.trail = new Trail(this.position, 16);
+    this.trail = new Trail(this.position, 32);
 
     this.simulation.scene.add(this.trail);
 
@@ -78,8 +78,9 @@ export default class Organism extends THREE.Mesh {
   think() {
     const thought = Math.random() * 100;
 
-    if (thought <= 10) {
+    if (thought <= 5) {
       this.target = this.simulation.getRandomPosition();
+      // this.material.color.set(0x000000);
     } else if (this.target != null) {
       if (this.position.distanceTo(this.target) > 0.5) {
         rotateTowards(this, this.target, 0.03);
@@ -87,6 +88,8 @@ export default class Organism extends THREE.Mesh {
       } else {
         this.target = null;
       }
+      // this.material.color.set(0xF23C55);
     }
+    this.rotateZ((Math.sin(this.rotation.x) + Math.cos(this.rotation.y)) / 10);
   }
 }
