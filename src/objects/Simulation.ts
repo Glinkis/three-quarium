@@ -1,5 +1,4 @@
 /**
- * @flow
  * @author: Victor Glindås
  */
 import * as THREE from 'three';
@@ -7,6 +6,10 @@ import OrbitalPerspectiveCamera from './OrbitalCamera';
 
 export default class Simulation {
   size: number;
+  element: HTMLElement;
+  renderer: THREE.WebGLRenderer;
+  scene: THREE.Scene;
+  camera: OrbitalPerspectiveCamera;
 
   constructor() {
     this.size = 25;

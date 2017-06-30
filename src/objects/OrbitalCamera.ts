@@ -1,5 +1,4 @@
 /**
- * @flow
  * @author: Victor Glindås
  */
 import * as THREE from 'three';
@@ -17,10 +16,11 @@ const MAGNITUDE_PANNING = 0.004;
 const MAGNITUDE_ZOOM = 0.004;
 
 export default class OrbitalCamera extends THREE.PerspectiveCamera {
-  eventElement: ?HTMLElement;
+  eventElement?: HTMLElement;
 
   distance: number;
   centerPoint: THREE.Vector3;
+  up: THREE.Vector3;
 
   rotationX: number;
   rotationY: number;
@@ -28,8 +28,9 @@ export default class OrbitalCamera extends THREE.PerspectiveCamera {
   panX: number;
   panY: number;
 
-  onMouseWheel: () => void;
-  onStartEvent: () => void;
+  pvtZoom: number;
+  zoomMin: number;
+  zoomMax: number;
 
   constructor() {
     super();
@@ -43,7 +44,6 @@ export default class OrbitalCamera extends THREE.PerspectiveCamera {
     this.panX = 0;
     this.panY = 0;
 
-    this.zoom = 1;
     this.zoomMax = 4;
     this.zoomMin = 1;
 
@@ -121,7 +121,7 @@ export default class OrbitalCamera extends THREE.PerspectiveCamera {
     return this.pvtZoom;
   }
 
-  set zoom(value: number): void {
+  set zoom(value: number) {
     this.pvtZoom = clamp(value, this.zoomMin, this.zoomMax);
   }
 

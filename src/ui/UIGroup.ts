@@ -1,5 +1,4 @@
 /**
- * @flow
  * @author: Victor Glindås
  */
 import UIComponent from './UIComponent';

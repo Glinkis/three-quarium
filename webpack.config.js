@@ -20,7 +20,7 @@ let devtool = '';
 
 if (env === 'build') {
   appendix = '.min.js';
-  plugins.push(new UglifyJsPlugin({ minimize: true }));
+  plugins.push(new UglifyJsPlugin({ minimize: true, sourceMaps: true }));
 } else {
   devtool = 'source-map';
 }

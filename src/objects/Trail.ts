@@ -1,5 +1,4 @@
 /**
- * @flow
  * @author: Victor Glindås
  */
 import * as THREE from 'three';
@@ -35,10 +34,10 @@ export default class Trail extends THREE.Line {
     requestAnimationFrame(this.update);
 
     const position = this.target;
-    this.geometry.vertices.splice(0, 1);
+    (this.geometry as THREE.Geometry).vertices.splice(0, 1);
     const vertex = position.clone();
-    this.geometry.vertices.push(vertex);
-    this.geometry.verticesNeedUpdate = true;
+    (this.geometry as THREE.Geometry).vertices.push(vertex);
+    (this.geometry as THREE.Geometry).verticesNeedUpdate = true;
   }
 }
 

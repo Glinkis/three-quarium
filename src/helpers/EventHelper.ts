@@ -1,5 +1,4 @@
 /**
- * @flow
  * @author: Victor Glindås
  */
 type PositionEvent = MouseEvent | Touch;

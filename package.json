@@ -30,6 +30,7 @@
     "three": "0.84.0"
   },
   "devDependencies": {
+    "@types/three": "^0.84.15",
     "awesome-typescript-loader": "3.2.1",
     "clean-webpack-plugin": "0.1.15",
     "css-loader": "0.26.1",

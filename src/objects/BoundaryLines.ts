@@ -1,5 +1,4 @@
 /**
- * @flow
  * @author: Victor Glindås
  */
 import * as THREE from 'three';

@@ -1,13 +1,12 @@
 /**
- * @flow
  * @author: Victor Glindås
  */
 import * as THREE from 'three';
 import Simulation from './Simulation';
 import Trail from './Trail';
-import '../extensions/THREE.Euler/randomize';
-import '../extensions/THREE.Object3D/rotateTowards';
-import '../extensions/THREE.Vector3/moveTowards';
+import randomize from '../extensions/THREE.Euler/randomize';
+import rotateTowards from '../extensions/THREE.Object3D/rotateTowards';
+import moveTowards from '../extensions/THREE.Vector3/moveTowards';
 import clamp from '../math/clamp';
 
 export default class Organism extends THREE.Mesh {
@@ -25,7 +24,7 @@ export default class Organism extends THREE.Mesh {
     this.simulation = simulation;
     this.velocity = 0.25;
     this.position.copy(this.simulation.getRandomPosition());
-    this.rotation.randomize();
+    randomize(this.rotation);
     this.trail = new Trail(this.position, 16);
 
     this.simulation.scene.add(this.trail);
@@ -43,11 +42,11 @@ export default class Organism extends THREE.Mesh {
   }
 
   setGeometry() {
-    this.geometry = new THREE.IcosahedronBufferGeometry(1, 1);
+    this.geometry = new (THREE as any).IcosahedronBufferGeometry(1, 1);
   }
 
   buildEyes() {
-    const geometry = new THREE.IcosahedronBufferGeometry(0.2, 0);
+    const geometry = new (THREE as any).IcosahedronBufferGeometry(0.2, 0);
     const material = new THREE.MeshBasicMaterial({ color: 0x000000 });
 
     const leftEye = new THREE.Mesh(geometry, material);
@@ -76,7 +75,6 @@ export default class Organism extends THREE.Mesh {
     this.position.z = clamp(this.position.z, -bounds + box.max.z, bounds + box.min.z);
   }
 
-
   think() {
     const thought = Math.random() * 100;
 
@@ -84,7 +82,7 @@ export default class Organism extends THREE.Mesh {
       this.target = this.simulation.getRandomPosition();
     } else if (this.target != null) {
       if (this.position.distanceTo(this.target) > 0.5) {
-        this.rotateTowards(this.target, 0.03);
+        rotateTowards(this, this.target, 0.03);
         this.translateZ(this.velocity);
       } else {
         this.target = null;

@@ -1,5 +1,4 @@
 /**
- * @flow
  * @author: Victor Glindås
  */
 export default class UIComponent {
@@ -17,6 +16,6 @@ export default class UIComponent {
   }
 
   remove() {
-    this.parentElement.removeChild(this.element);
+    this.parent.removeChild(this.element);
   }
 }
