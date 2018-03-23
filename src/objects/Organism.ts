@@ -1,21 +1,25 @@
-/**
- * @author: Victor Glindås
- */
-import * as THREE from 'three';
-import Simulation from './Simulation';
-import Trail from './Trail';
-import randomize from '../extensions/THREE.Euler/randomize';
-import rotateTowards from '../extensions/THREE.Object3D/rotateTowards';
-import moveTowards from '../extensions/THREE.Vector3/moveTowards';
-import clamp from '../math/clamp';
+import {
+  Vector3,
+  Mesh,
+  Material,
+  MeshBasicMaterial,
+  IcosahedronBufferGeometry,
+  BufferGeometry
+} from "three";
+import Simulation from "./Simulation";
+import Trail from "./Trail";
+import randomize from "../extensions/THREE.Euler/randomize";
+import rotateTowards from "../extensions/THREE.Object3D/rotateTowards";
+import moveTowards from "../extensions/THREE.Vector3/moveTowards";
+import clamp from "../math/clamp";
 
-export default class Organism extends THREE.Mesh {
+export default class Organism extends Mesh {
   simulation: Simulation;
   age: number;
-  geometry: THREE.Geometry;
-  material: THREE.Material;
+  geometry: BufferGeometry;
+  material: Material;
   velocity: number;
-  target: THREE.Vector3;
+  target: Vector3;
   trail: Trail;
 
   constructor(simulation: Simulation) {
@@ -38,19 +42,19 @@ export default class Organism extends THREE.Mesh {
   }
 
   setMaterial() {
-    this.material = new THREE.MeshBasicMaterial({ color: 0xF23C55 });
+    this.material = new MeshBasicMaterial({ color: 0xf23c55 });
   }
 
   setGeometry() {
-    this.geometry = new (THREE as any).IcosahedronBufferGeometry(1, 1);
+    this.geometry = new IcosahedronBufferGeometry(1, 1);
   }
 
   buildEyes() {
-    const geometry = new (THREE as any).IcosahedronBufferGeometry(0.2, 0);
-    const material = new THREE.MeshBasicMaterial({ color: 0x000000 });
+    const geometry = new IcosahedronBufferGeometry(0.2, 0);
+    const material = new MeshBasicMaterial({ color: 0x000000 });
 
-    const leftEye = new THREE.Mesh(geometry, material);
-    const rightEye = new THREE.Mesh(geometry, material);
+    const leftEye = new Mesh(geometry, material);
+    const rightEye = new Mesh(geometry, material);
 
     this.add(leftEye);
     this.add(rightEye);
@@ -70,9 +74,24 @@ export default class Organism extends THREE.Mesh {
     const bounds = this.simulation.size * 0.5;
     this.geometry.computeBoundingBox();
     const box = this.geometry.boundingBox;
-    this.position.x = clamp(this.position.x, -bounds + box.max.x, bounds + box.min.x);
-    this.position.y = clamp(this.position.y, -bounds + box.max.y, bounds + box.min.y);
-    this.position.z = clamp(this.position.z, -bounds + box.max.z, bounds + box.min.z);
+
+    this.position.x = clamp(
+      this.position.x,
+      -bounds + box.max.x,
+      bounds + box.min.x
+    );
+
+    this.position.y = clamp(
+      this.position.y,
+      -bounds + box.max.y,
+      bounds + box.min.y
+    );
+
+    this.position.z = clamp(
+      this.position.z,
+      -bounds + box.max.z,
+      bounds + box.min.z
+    );
   }
 
   think() {
@@ -88,7 +107,6 @@ export default class Organism extends THREE.Mesh {
       } else {
         this.target = null;
       }
-      // this.material.color.set(0xF23C55);
     }
     this.rotateZ((Math.sin(this.rotation.x) + Math.cos(this.rotation.y)) / 10);
   }

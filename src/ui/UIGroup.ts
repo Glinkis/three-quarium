@@ -1,6 +1,3 @@
-/**
- * @author: Victor Glindås
- */
 import UIComponent from './UIComponent';
 
 export default class UIGroup extends UIComponent {

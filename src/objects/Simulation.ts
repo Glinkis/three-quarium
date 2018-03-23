@@ -1,6 +1,3 @@
-/**
- * @author: Victor Glindås
- */
 import * as THREE from 'three';
 import OrbitalPerspectiveCamera from './OrbitalCamera';
 

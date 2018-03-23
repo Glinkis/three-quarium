@@ -1,6 +1,3 @@
-/**
- * @author: Victor Glindås
- */
 export default class UIComponent {
   parent: HTMLElement;
   element: HTMLElement;

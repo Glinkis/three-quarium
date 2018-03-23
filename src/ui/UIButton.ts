@@ -1,10 +1,7 @@
-/**
- * @author: Victor Glindås
- */
 import UIComponent from './UIComponent';
 
 export default class UIButton extends UIComponent {
-  onClick: ()=> void;
+  onClick: () => void;
 
   constructor(parent: HTMLElement) {
     super(parent);

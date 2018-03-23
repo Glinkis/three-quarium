@@ -1,26 +1,23 @@
-/**
- * @author: Victor Glindås
- */
-import * as THREE from 'three';
-import clamp from '../math/clamp';
+import { Vector3, PerspectiveCamera } from "three";
+import clamp from "../math/clamp";
 import {
   getEventByType,
   getEventDeltaMovement,
   getEventTouchesDeltaDistance,
   getEventMoveByType,
-  getEventEndByType,
-} from '../helpers/EventHelper';
+  getEventEndByType
+} from "../helpers/EventHelper";
 
 const MAGNITUDE_ROTATION = 0.004;
 const MAGNITUDE_PANNING = 0.004;
 const MAGNITUDE_ZOOM = 0.004;
 
-export default class OrbitalCamera extends THREE.PerspectiveCamera {
+export default class OrbitalCamera extends PerspectiveCamera {
   eventElement?: HTMLElement;
 
   distance: number;
-  centerPoint: THREE.Vector3;
-  up: THREE.Vector3;
+  centerPoint: Vector3;
+  up: Vector3;
 
   rotationX: number;
   rotationY: number;
@@ -36,7 +33,7 @@ export default class OrbitalCamera extends THREE.PerspectiveCamera {
     super();
 
     this.distance = 100;
-    this.centerPoint = new THREE.Vector3();
+    this.centerPoint = new Vector3();
 
     this.rotationX = 0;
     this.rotationY = 0;
@@ -53,7 +50,7 @@ export default class OrbitalCamera extends THREE.PerspectiveCamera {
     this.onStartEvent = this.onStartEvent.bind(this);
   }
 
-  onMouseWheel(event: WheelEvent): void {
+  onMouseWheel(event: WheelEvent) {
     event.preventDefault();
     let delta = 0;
     if (event.wheelDelta) {
@@ -69,7 +66,7 @@ export default class OrbitalCamera extends THREE.PerspectiveCamera {
     this.updateProjectionMatrix();
   }
 
-  onStartEvent(startEvent: any): void {
+  onStartEvent(startEvent: any) {
     startEvent.preventDefault();
 
     const start = getEventByType(startEvent);
@@ -86,23 +83,29 @@ export default class OrbitalCamera extends THREE.PerspectiveCamera {
 
     const onMoveEvent = (moveEvent: any) => {
       const move = getEventByType(moveEvent);
-      const numberOfTouches = moveEvent.touches ? moveEvent.touches.length : false;
+      const numberOfTouches = moveEvent.touches
+        ? moveEvent.touches.length
+        : false;
       const movementDelta = getEventDeltaMovement(start, move);
 
       if (numberOfTouches === 2) {
-        const touchMovementDelta =
-          getEventTouchesDeltaDistance(startEvent.touches, moveEvent.touches);
-        this.zoom = zoomCompound - (touchMovementDelta * MAGNITUDE_ZOOM);
+        const touchMovementDelta = getEventTouchesDeltaDistance(
+          startEvent.touches,
+          moveEvent.touches
+        );
+        this.zoom = zoomCompound - touchMovementDelta * MAGNITUDE_ZOOM;
       }
 
       if (numberOfTouches === 2 || moveEvent.button === 1) {
-        this.panX = panCompoundX + ((movementDelta.x * MAGNITUDE_PANNING) * 2);
-        this.panY = panCompoundY + ((movementDelta.y * MAGNITUDE_PANNING) * 2);
+        this.panX = panCompoundX + movementDelta.x * MAGNITUDE_PANNING * 2;
+        this.panY = panCompoundY + movementDelta.y * MAGNITUDE_PANNING * 2;
       }
 
       if (numberOfTouches === 1 || moveEvent.button === 0) {
-        this.rotationX = rotationCompoundX + (movementDelta.x * MAGNITUDE_ROTATION);
-        this.rotationY = rotationCompoundY + (movementDelta.y * MAGNITUDE_ROTATION);
+        this.rotationX =
+          rotationCompoundX + movementDelta.x * MAGNITUDE_ROTATION;
+        this.rotationY =
+          rotationCompoundY + movementDelta.y * MAGNITUDE_ROTATION;
       }
 
       this.update();
@@ -117,7 +120,7 @@ export default class OrbitalCamera extends THREE.PerspectiveCamera {
     document.addEventListener(endType, onEventEnd);
   }
 
-  get zoom(): number {
+  get zoom() {
     return this.pvtZoom;
   }
 
@@ -127,23 +130,24 @@ export default class OrbitalCamera extends THREE.PerspectiveCamera {
 
   setEventElement(element: HTMLElement) {
     if (this.eventElement != null) {
-      this.eventElement.removeEventListener('mousedown', this.onStartEvent);
-      this.eventElement.removeEventListener('touchstart', this.onStartEvent);
-      this.eventElement.removeEventListener('mousewheel', this.onMouseWheel);
+      this.eventElement.removeEventListener("mousedown", this.onStartEvent);
+      this.eventElement.removeEventListener("touchstart", this.onStartEvent);
+      this.eventElement.removeEventListener("mousewheel", this.onMouseWheel);
     }
 
-    element.addEventListener('mousedown', this.onStartEvent);
-    element.addEventListener('touchstart', this.onStartEvent);
-    element.addEventListener('mousewheel', this.onMouseWheel);
+    element.addEventListener("mousedown", this.onStartEvent);
+    element.addEventListener("touchstart", this.onStartEvent);
+    element.addEventListener("mousewheel", this.onMouseWheel);
 
     this.eventElement = element;
   }
 
-  update(): void {
+  update() {
+    // prettier-ignore
     this.position.set(
-      this.centerPoint.x + (this.distance * Math.cos(this.rotationY) * Math.cos(this.rotationX)),
-      this.centerPoint.y + (this.distance * Math.sin(this.rotationY)),
-      this.centerPoint.z + (this.distance * Math.cos(this.rotationY) * Math.sin(this.rotationX)),
+      this.centerPoint.x + this.distance * Math.cos(this.rotationY) * Math.cos(this.rotationX),
+      this.centerPoint.y + this.distance * Math.sin(this.rotationY),
+      this.centerPoint.z + this.distance * Math.cos(this.rotationY) * Math.sin(this.rotationX)
     );
 
     this.correctCameraUpVector();
@@ -153,17 +157,15 @@ export default class OrbitalCamera extends THREE.PerspectiveCamera {
     this.translateY(this.panY);
   }
 
-  correctCameraUpVector(): void {
+  correctCameraUpVector() {
     this.up = this.centerPoint.clone();
-
     this.up.y += Math.cos(this.rotationY);
 
-    let verticalPI = this.rotationY % Math.PI;
-    verticalPI = Math.abs(verticalPI) - (Math.PI / 2);
+    const vertical = Math.abs(this.rotationY % Math.PI) - Math.PI / 2;
 
-    if (verticalPI < 0.5 && verticalPI > -0.5) {
-      this.up.x -= (Math.cos(this.rotationX) * this.position.y);
-      this.up.z -= (Math.sin(this.rotationX) * this.position.y);
+    if (vertical < 0.5 && vertical > -0.5) {
+      this.up.x -= Math.cos(this.rotationX) * this.position.y;
+      this.up.z -= Math.sin(this.rotationX) * this.position.y;
     }
   }
 }

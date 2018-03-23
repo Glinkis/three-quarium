@@ -1,9 +1,6 @@
-/**
- * @author: Victor Glindås
- */
-import * as THREE from 'three';
+import { Line, LineBasicMaterial, Geometry} from 'three';
 
-export default class Trail extends THREE.Line {
+export default class Trail extends Line {
   target: THREE.Vector3;
   points: number;
 
@@ -20,11 +17,11 @@ export default class Trail extends THREE.Line {
   }
 
   setMaterial() {
-    this.material = new THREE.LineBasicMaterial({ color: 0x61C791 });
+    this.material = new LineBasicMaterial({ color: 0x61C791 });
   }
 
   setGeometry() {
-    this.geometry = new THREE.Geometry();
+    this.geometry = new Geometry();
     while (this.geometry.vertices.length < this.points) {
       this.geometry.vertices.push(this.target.clone());
     }
@@ -34,10 +31,10 @@ export default class Trail extends THREE.Line {
     requestAnimationFrame(this.update);
 
     const position = this.target;
-    (this.geometry as THREE.Geometry).vertices.splice(0, 1);
+    (this.geometry as Geometry).vertices.splice(0, 1);
     const vertex = position.clone();
-    (this.geometry as THREE.Geometry).vertices.push(vertex);
-    (this.geometry as THREE.Geometry).verticesNeedUpdate = true;
+    (this.geometry as Geometry).vertices.push(vertex);
+    (this.geometry as Geometry).verticesNeedUpdate = true;
   }
 }
 
