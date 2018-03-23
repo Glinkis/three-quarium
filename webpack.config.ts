@@ -6,8 +6,7 @@ export default {
   devtool: "source-map",
   devServer: {
     port: 8080,
-    host: "0.0.0.0",
-    hot: true
+    host: "0.0.0.0"
   },
   module: {
     rules: [
@@ -32,7 +31,6 @@ export default {
     extensions: [".ts", ".js"]
   },
   plugins: [
-    new HotModuleReplacementPlugin(),
     new HtmlWebpackPlugin({
       title: "three-quarium",
       template: "template.html"
