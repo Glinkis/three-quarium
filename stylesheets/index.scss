@@ -1,12 +1,15 @@
-$mainColor1: #E0FFB3;
-$mainColor2: #61C791;
-$mainColor3: #31797D;
-$mainColor4: #2A2F36;
-$mainColor5: #F23C55;
-
+$mainColor1: #e0ffb3;
+$mainColor2: #61c791;
+$mainColor3: #31797d;
+$mainColor4: #2a2f36;
+$mainColor5: #f23c55;
 body {
   padding: 0;
   margin: 0;
+}
+
+@mixin bottom-relief($color) {
+  border-bottom: 2px solid darken($color, 25);
 }
 
 #three-quarium {
@@ -15,32 +18,18 @@ body {
   width: 100%;
   background-color: $mainColor4;
   overflow: hidden;
-
   font-family: Calibri, Arial, sans-serif;
-  font-weight: 400;
-  font-size: 16px;
-
-  .canvas {
-    position: absolute;
-  }
-
-  @mixin bottom-relief($color) {
-    border-bottom: 2px solid darken($color, 25);
-  }
-
   .ui-component {
-    padding: 8px;
+    padding: 16px;
     border-radius: 8px;
     margin-top: 4px;
     text-align: center;
     transition: all ease 175ms;
     color: $mainColor1;
+    &:first-child {
+      margin-top: 0;
+    }
   }
-
-  .ui-component:first-child {
-    margin-top: 0;
-  }
-
   .ui-group {
     @extend .ui-component;
     position: absolute;
@@ -49,14 +38,12 @@ body {
     margin: 16px;
     background-color: $mainColor3;
     @include bottom-relief($mainColor3);
-    border-radius: 12px;
+    border-radius: 16px;
   }
-
   .ui-button {
     @extend .ui-component;
     background-color: $mainColor2;
     @include bottom-relief($mainColor2);
-
     &:hover {
       background-color: lighten($mainColor2, 25);
       color: darken($mainColor2, 25);
