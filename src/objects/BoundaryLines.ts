@@ -1,10 +1,4 @@
-import {
-  Geometry,
-  LineDashedMaterial,
-  LineSegments,
-  Material,
-  Vector3
-} from "three";
+import { Geometry, LineDashedMaterial, LineSegments, Vector3 } from "three";
 
 export default class BoundaryLines extends LineSegments {
   private size: number;

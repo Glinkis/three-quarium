@@ -1,11 +1,11 @@
-import * as THREE from "three";
+import { Fog, Scene, Vector3, WebGLRenderer } from "three";
 import OrbitalPerspectiveCamera from "./OrbitalCamera";
 
 export default class Simulation {
   public size = 50;
-  public scene = new THREE.Scene();
+  public scene = new Scene();
   public element = document.createElement("div");
-  private renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+  private renderer = new WebGLRenderer({ antialias: true, alpha: true });
   private camera = new OrbitalPerspectiveCamera();
 
   constructor() {
@@ -15,7 +15,7 @@ export default class Simulation {
     this.renderer.setPixelRatio(window.devicePixelRatio);
     this.element.appendChild(this.renderer.domElement);
 
-    this.scene.fog = new THREE.Fog(0x000000, 0, this.size * 7.5);
+    this.scene.fog = new Fog(0x000000, 0, this.size * 7.5);
 
     this.camera.distance = this.size * 2.5;
     this.camera.setEventElement(this.renderer.domElement);
@@ -30,7 +30,7 @@ export default class Simulation {
 
   public getRandomPosition() {
     const half = this.size * 0.5;
-    return new THREE.Vector3(
+    return new Vector3(
       Math.random() * (half + half) - half,
       Math.random() * (half + half) - half,
       Math.random() * (half + half) - half
