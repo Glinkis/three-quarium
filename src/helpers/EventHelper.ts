@@ -4,9 +4,9 @@ export function eventByType(event: MouseEvent | TouchEvent, touchIndex = 0) {
   return event instanceof MouseEvent ? event : event.touches[touchIndex];
 }
 
-export const eventMoveByType = (event: MouseEvent | TouchEvent) => {
+export function eventMoveByType(event: MouseEvent | TouchEvent) {
   return event instanceof MouseEvent ? "mousemove" : "touchmove";
-};
+}
 
 export function eventEndByType(event: MouseEvent | TouchEvent) {
   return event instanceof MouseEvent ? "mouseup" : "touchend";
@@ -32,12 +32,4 @@ export function touchesDeltaDistance(start: Touch[], end: Touch[]) {
   const startDistance = eventsDistance(start[0], start[1]);
   const endDistance = eventsDistance(end[0], end[1]);
   return startDistance - endDistance;
-}
-
-export function isEventDistanceBelowThreshold(
-  a: MouseEvent | Touch,
-  b: MouseEvent | Touch,
-  threshold = DISTANCE_THRESHOLD
-) {
-  return eventsDistance(a, b) < threshold;
 }
