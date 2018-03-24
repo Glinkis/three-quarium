@@ -107,8 +107,8 @@ export default class OrbitalCamera extends PerspectiveCamera {
 
       if (touches === 2) {
         const delta = touchesDeltaDistance(
-          moveEvent.touches[0],
-          moveEvent.touches[1]
+          startEvent.touches,
+          moveEvent.touches
         );
         this.zoom = zoomCompound - delta * MAGNITUDE_ZOOM;
       }
