@@ -1,9 +1,9 @@
 import "../stylesheets/index.scss";
-import Simulation from "./objects/Simulation";
 import Bounds from "./objects/BoundaryLines";
 import Organism from "./objects/Organism";
-import UIGroup from "./ui/UIGroup";
+import Simulation from "./objects/Simulation";
 import UIButton from "./ui/UIButton";
+import UIGroup from "./ui/UIGroup";
 
 const simulation = new Simulation();
 simulation.scene.add(new Bounds(simulation.size));
@@ -38,13 +38,5 @@ btnClearAll.onClick = () => {
   organisms.forEach(organism => {
     simulation.scene.remove(organism);
     simulation.scene.remove(organism.trail);
-  });
-};
-
-const btnLog = new UIButton(uiGroup.element);
-btnLog.element.textContent = "Log Scene";
-btnLog.onClick = () => {
-  simulation.scene.traverse(child => {
-    console.log(child);
   });
 };

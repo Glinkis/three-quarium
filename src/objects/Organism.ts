@@ -1,56 +1,53 @@
 import {
-  Vector3,
-  Mesh,
-  Material,
-  MeshBasicMaterial,
+  BufferGeometry,
   IcosahedronBufferGeometry,
-  BufferGeometry
+  Material,
+  Mesh,
+  MeshBasicMaterial,
+  Vector3
 } from "three";
+import randomEuler from "../extensions/THREE.Euler/randomEuler";
+import rotateTowards from "../extensions/THREE.Object3D/rotateTowards";
+import clamp from "../math/clamp";
 import Simulation from "./Simulation";
 import Trail from "./Trail";
-import randomize from "../extensions/THREE.Euler/randomize";
-import rotateTowards from "../extensions/THREE.Object3D/rotateTowards";
-import moveTowards from "../extensions/THREE.Vector3/moveTowards";
-import clamp from "../math/clamp";
 
 export default class Organism extends Mesh {
-  simulation: Simulation;
-  age: number;
-  geometry: BufferGeometry;
-  material: Material;
-  velocity: number;
-  target: Vector3;
-  trail: Trail;
+  public geometry: BufferGeometry;
+  public material: Material;
+
+  private velocity = 0.25;
+  private simulation: Simulation;
+  private age: number;
+  private target: Vector3;
+  private trail: Trail;
 
   constructor(simulation: Simulation) {
     super();
 
     this.simulation = simulation;
-    this.velocity = 0.25;
     this.position.copy(this.simulation.getRandomPosition());
-    randomize(this.rotation);
-    this.trail = new Trail(this.position, 32);
+    this.rotation.copy(randomEuler());
+    this.trail = new Trail(this.position);
 
     this.simulation.scene.add(this.trail);
 
     this.setMaterial();
     this.setGeometry();
     this.buildEyes();
-
-    this.update = this.update.bind(this);
     this.update();
   }
 
-  setMaterial() {
+  private setMaterial() {
     this.material = new MeshBasicMaterial({ color: 0xf23c55 });
   }
 
-  setGeometry() {
+  private setGeometry() {
     this.geometry = new IcosahedronBufferGeometry(1, 1);
   }
 
-  buildEyes() {
-    const geometry = new IcosahedronBufferGeometry(0.2, 0);
+  private buildEyes() {
+    const geometry = new IcosahedronBufferGeometry(0.4, 0);
     const material = new MeshBasicMaterial({ color: 0x000000 });
 
     const leftEye = new Mesh(geometry, material);
@@ -63,38 +60,24 @@ export default class Organism extends Mesh {
     rightEye.position.set(-0.5, 0, 0.8);
   }
 
-  update() {
+  private update = () => {
     requestAnimationFrame(this.update);
     this.age += 1;
     this.think();
-    this.clampPositionToSimulationBounds();
-  }
+    this.clampPositionToBounds();
+  };
 
-  clampPositionToSimulationBounds() {
+  private clampPositionToBounds() {
     const bounds = this.simulation.size * 0.5;
     this.geometry.computeBoundingBox();
-    const box = this.geometry.boundingBox;
+    const { min, max } = this.geometry.boundingBox;
 
-    this.position.x = clamp(
-      this.position.x,
-      -bounds + box.max.x,
-      bounds + box.min.x
-    );
-
-    this.position.y = clamp(
-      this.position.y,
-      -bounds + box.max.y,
-      bounds + box.min.y
-    );
-
-    this.position.z = clamp(
-      this.position.z,
-      -bounds + box.max.z,
-      bounds + box.min.z
-    );
+    this.position.x = clamp(this.position.x, -bounds + max.x, bounds + min.x);
+    this.position.y = clamp(this.position.y, -bounds + max.y, bounds + min.y);
+    this.position.z = clamp(this.position.z, -bounds + max.z, bounds + min.z);
   }
 
-  think() {
+  private think() {
     const thought = Math.random() * 100;
 
     if (thought <= 5) {

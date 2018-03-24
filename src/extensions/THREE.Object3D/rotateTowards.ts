@@ -1,4 +1,4 @@
-import { Matrix4, Object3D, Vector3, Quaternion } from "three";
+import { Matrix4, Object3D, Quaternion, Vector3 } from "three";
 
 export default (object: Object3D, target: Vector3, amount: number) => {
   const matrix = new Matrix4().lookAt(target, object.position, object.up);

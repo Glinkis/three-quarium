@@ -1,10 +1,10 @@
-import UIComponent from './UIComponent';
+import UIComponent from "./UIComponent";
 
 export default class UIGroup extends UIComponent {
-  element: HTMLElement;
+  public element: HTMLElement;
 
   constructor(parent: HTMLElement) {
     super(parent);
-    this.element.className = 'ui-group';
+    this.element.className = "ui-group";
   }
 }

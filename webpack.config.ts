@@ -1,7 +1,8 @@
-import { Configuration, HotModuleReplacementPlugin } from "webpack";
-import * as path from "path";
 import * as HtmlWebpackPlugin from "html-webpack-plugin";
+import * as path from "path";
+import { Configuration, HotModuleReplacementPlugin } from "webpack";
 
+// tslint:disable:object-literal-sort-keys
 export default {
   devtool: "source-map",
   devServer: {

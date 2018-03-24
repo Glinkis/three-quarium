@@ -1,40 +1,44 @@
-import { Line, LineBasicMaterial, Geometry} from 'three';
+import {
+  BufferGeometry,
+  Geometry,
+  Line,
+  LineBasicMaterial,
+  Vector3
+} from "three";
+
+const TRAIL_MATERIAL = new LineBasicMaterial({ color: 0x61c791 });
 
 export default class Trail extends Line {
-  target: THREE.Vector3;
-  points: number;
+  private target: Vector3;
 
-  constructor(target: THREE.Vector3, points: number) {
+  constructor(target: Vector3) {
     super();
     this.target = target;
-    this.points = points;
+    this.material = TRAIL_MATERIAL;
 
-    this.setMaterial();
     this.setGeometry();
-
-    this.update = this.update.bind(this);
     this.update();
   }
 
-  setMaterial() {
-    this.material = new LineBasicMaterial({ color: 0x61C791 });
-  }
-
-  setGeometry() {
+  private setGeometry() {
     this.geometry = new Geometry();
-    while (this.geometry.vertices.length < this.points) {
+    while (this.geometry.vertices.length < 32) {
       this.geometry.vertices.push(this.target.clone());
     }
   }
 
-  update() {
+  private update = () => {
+    if (this.geometry instanceof BufferGeometry) {
+      throw new Error("Wrong geometry type.");
+    }
+
     requestAnimationFrame(this.update);
 
     const position = this.target;
-    (this.geometry as Geometry).vertices.splice(0, 1);
     const vertex = position.clone();
-    (this.geometry as Geometry).vertices.push(vertex);
-    (this.geometry as Geometry).verticesNeedUpdate = true;
-  }
-}
 
+    this.geometry.vertices.shift();
+    this.geometry.vertices.push(vertex);
+    this.geometry.verticesNeedUpdate = true;
+  };
+}

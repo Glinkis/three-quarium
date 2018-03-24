@@ -1,33 +1,38 @@
-import { Vector3, PerspectiveCamera } from "three";
-import clamp from "../math/clamp";
+import { PerspectiveCamera, Vector3 } from "three";
+import positionAround from "../extensions/THREE.Vector3/positionAround";
 import {
-  getEventByType,
-  getEventDeltaMovement,
-  getEventTouchesDeltaDistance,
-  getEventMoveByType,
-  getEventEndByType
+  eventByType,
+  eventDeltaMovement,
+  eventEndByType,
+  eventMoveByType,
+  touchesDeltaDistance
 } from "../helpers/EventHelper";
+import clamp from "../math/clamp";
 
 const MAGNITUDE_ROTATION = 0.004;
 const MAGNITUDE_PANNING = 0.004;
 const MAGNITUDE_ZOOM = 0.004;
 
 export default class OrbitalCamera extends PerspectiveCamera {
-  eventElement?: HTMLElement;
+  public distance: number;
 
-  distance: number;
-  centerPoint: Vector3;
-  up: Vector3;
+  private eventElement?: HTMLElement;
+  private centerPoint: Vector3;
+  private rotationX: number;
+  private rotationY: number;
+  private panX: number;
+  private panY: number;
+  private zoomPvt: number;
+  private zoomMin: number;
+  private zoomMax: number;
 
-  rotationX: number;
-  rotationY: number;
+  get zoom() {
+    return this.zoomPvt;
+  }
 
-  panX: number;
-  panY: number;
-
-  pvtZoom: number;
-  zoomMin: number;
-  zoomMax: number;
+  set zoom(value: number) {
+    this.zoomPvt = clamp(value, this.zoomMin, this.zoomMax);
+  }
 
   constructor() {
     super();
@@ -50,7 +55,37 @@ export default class OrbitalCamera extends PerspectiveCamera {
     this.onStartEvent = this.onStartEvent.bind(this);
   }
 
-  onMouseWheel(event: WheelEvent) {
+  public update() {
+    this.position.copy(
+      positionAround(
+        this.centerPoint,
+        this.rotationX,
+        this.rotationY
+      ).multiplyScalar(this.distance)
+    );
+
+    this.correctCameraUpVector();
+
+    this.lookAt(this.centerPoint);
+    this.translateX(-this.panX);
+    this.translateY(this.panY);
+  }
+
+  public setEventElement(element: HTMLElement) {
+    if (this.eventElement != null) {
+      this.eventElement.removeEventListener("mousedown", this.onStartEvent);
+      this.eventElement.removeEventListener("touchstart", this.onStartEvent);
+      this.eventElement.removeEventListener("mousewheel", this.onMouseWheel);
+    }
+
+    element.addEventListener("mousedown", this.onStartEvent);
+    element.addEventListener("touchstart", this.onStartEvent);
+    element.addEventListener("mousewheel", this.onMouseWheel);
+
+    this.eventElement = element;
+  }
+
+  private onMouseWheel(event: WheelEvent) {
     event.preventDefault();
     let delta = 0;
     if (event.wheelDelta) {
@@ -66,12 +101,12 @@ export default class OrbitalCamera extends PerspectiveCamera {
     this.updateProjectionMatrix();
   }
 
-  onStartEvent(startEvent: any) {
+  private onStartEvent(startEvent: any) {
     startEvent.preventDefault();
 
-    const start = getEventByType(startEvent);
-    const moveType = getEventMoveByType(startEvent);
-    const endType = getEventEndByType(startEvent);
+    const start = eventByType(startEvent);
+    const moveType = eventMoveByType(startEvent);
+    const endType = eventEndByType(startEvent);
 
     const rotationCompoundX = this.rotationX;
     const rotationCompoundY = this.rotationY;
@@ -82,14 +117,14 @@ export default class OrbitalCamera extends PerspectiveCamera {
     const zoomCompound = this.zoom;
 
     const onMoveEvent = (moveEvent: any) => {
-      const move = getEventByType(moveEvent);
+      const move = eventByType(moveEvent);
       const numberOfTouches = moveEvent.touches
         ? moveEvent.touches.length
         : false;
-      const movementDelta = getEventDeltaMovement(start, move);
+      const movementDelta = eventDeltaMovement(start, move);
 
       if (numberOfTouches === 2) {
-        const touchMovementDelta = getEventTouchesDeltaDistance(
+        const touchMovementDelta = touchesDeltaDistance(
           startEvent.touches,
           moveEvent.touches
         );
@@ -120,44 +155,7 @@ export default class OrbitalCamera extends PerspectiveCamera {
     document.addEventListener(endType, onEventEnd);
   }
 
-  get zoom() {
-    return this.pvtZoom;
-  }
-
-  set zoom(value: number) {
-    this.pvtZoom = clamp(value, this.zoomMin, this.zoomMax);
-  }
-
-  setEventElement(element: HTMLElement) {
-    if (this.eventElement != null) {
-      this.eventElement.removeEventListener("mousedown", this.onStartEvent);
-      this.eventElement.removeEventListener("touchstart", this.onStartEvent);
-      this.eventElement.removeEventListener("mousewheel", this.onMouseWheel);
-    }
-
-    element.addEventListener("mousedown", this.onStartEvent);
-    element.addEventListener("touchstart", this.onStartEvent);
-    element.addEventListener("mousewheel", this.onMouseWheel);
-
-    this.eventElement = element;
-  }
-
-  update() {
-    // prettier-ignore
-    this.position.set(
-      this.centerPoint.x + this.distance * Math.cos(this.rotationY) * Math.cos(this.rotationX),
-      this.centerPoint.y + this.distance * Math.sin(this.rotationY),
-      this.centerPoint.z + this.distance * Math.cos(this.rotationY) * Math.sin(this.rotationX)
-    );
-
-    this.correctCameraUpVector();
-
-    this.lookAt(this.centerPoint);
-    this.translateX(-this.panX);
-    this.translateY(this.panY);
-  }
-
-  correctCameraUpVector() {
+  private correctCameraUpVector() {
     this.up = this.centerPoint.clone();
     this.up.y += Math.cos(this.rotationY);
 

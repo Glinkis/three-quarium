@@ -1,15 +1,13 @@
 import {
-  LineSegments,
   Geometry,
-  Material,
   LineDashedMaterial,
+  LineSegments,
+  Material,
   Vector3
 } from "three";
 
 export default class BoundaryLines extends LineSegments {
-  size: number;
-  geometry: Geometry;
-  material: Material;
+  private size: number;
 
   constructor(size: number) {
     super();
@@ -18,7 +16,7 @@ export default class BoundaryLines extends LineSegments {
     this.setGeometry();
   }
 
-  setMaterial() {
+  private setMaterial() {
     this.material = new LineDashedMaterial({
       color: 0x61c791,
       dashSize: 1,
@@ -26,7 +24,7 @@ export default class BoundaryLines extends LineSegments {
     });
   }
 
-  setGeometry() {
+  private setGeometry() {
     const half = this.size * 0.5;
     this.geometry = new Geometry();
     this.geometry.vertices.push(
@@ -55,6 +53,5 @@ export default class BoundaryLines extends LineSegments {
       new Vector3(half, -half, -half),
       new Vector3(half, -half, half)
     );
-    // this.geometry.computeLineDistances();
   }
 }
