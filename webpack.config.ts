@@ -28,6 +28,9 @@ export default {
       }
     ]
   },
+  externals: {
+    three: "THREE"
+  },
   resolve: {
     extensions: [".ts", ".js"]
   },
