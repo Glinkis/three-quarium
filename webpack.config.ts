@@ -21,10 +21,10 @@ export default {
         test: /\.s?css$/,
         loaders: [
           "style-loader",
-          "css-loader?sourceMaps",
-          "sass-loader?sourceMaps"
+          "css-loader?sourceMap",
+          "sass-loader?sourceMap"
         ],
-        include: /stylesheets/
+        include: /src/
       }
     ]
   },
@@ -32,7 +32,7 @@ export default {
     three: "THREE"
   },
   resolve: {
-    extensions: [".ts", ".js"]
+    extensions: [".ts", ".js", ".scss"]
   },
   plugins: [
     new HtmlWebpackPlugin({

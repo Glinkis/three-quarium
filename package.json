@@ -13,12 +13,7 @@
     "type": "git",
     "url": "git+https://github.com/Glinkis/three-quarium.git"
   },
-  "keywords": [
-    "three",
-    "aquarium",
-    "simulation",
-    "typescript"
-  ],
+  "keywords": ["three", "aquarium", "simulation", "typescript"],
   "author": "Victor Glindås",
   "license": "MIT",
   "bugs": {

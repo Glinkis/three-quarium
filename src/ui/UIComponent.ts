@@ -1,3 +1,5 @@
+import "./UIComponent.scss";
+
 export default class UIComponent {
   public parent: HTMLElement;
   public element: HTMLElement;
@@ -5,14 +7,15 @@ export default class UIComponent {
   constructor(parent: HTMLElement) {
     this.parent = parent;
     this.element = document.createElement("div");
-    this.add();
+    this.element.classList.add("ui-component");
+    this.attach();
   }
 
-  public add() {
+  public attach() {
     this.parent.appendChild(this.element);
   }
 
-  public remove() {
+  public detach() {
     this.parent.removeChild(this.element);
   }
 }

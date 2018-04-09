@@ -1,0 +1,11 @@
+@import "../index";
+
+.ui-button {
+  background-color: $mainColor2;
+  @include bottom-relief($mainColor2);
+  &:hover {
+    background-color: lighten($mainColor2, 25);
+    color: darken($mainColor2, 25);
+    cursor: pointer;
+  }
+}

@@ -1,4 +1,4 @@
-import "../stylesheets/index.scss";
+import "./index.scss";
 import Bounds from "./objects/BoundaryLines";
 import Organism from "./objects/Organism";
 import Simulation from "./objects/Simulation";

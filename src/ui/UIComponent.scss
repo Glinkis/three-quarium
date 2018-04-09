@@ -1,0 +1,13 @@
+@import "../index";
+
+.ui-component {
+  padding: 16px;
+  border-radius: 8px;
+  margin-top: 4px;
+  text-align: center;
+  transition: all ease 175ms;
+  color: $mainColor1;
+  &:first-child {
+    margin-top: 0;
+  }
+}

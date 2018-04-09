@@ -1,0 +1,11 @@
+@import "../index";
+
+.ui-group {
+  position: absolute;
+  top: 0;
+  left: 0;
+  margin: 16px;
+  background-color: $mainColor3;
+  @include bottom-relief($mainColor3);
+  border-radius: 16px;
+}
