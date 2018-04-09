@@ -13,7 +13,12 @@
     "type": "git",
     "url": "git+https://github.com/Glinkis/three-quarium.git"
   },
-  "keywords": ["three", "aquarium", "simulation", "typescript"],
+  "keywords": [
+    "three",
+    "aquarium",
+    "simulation",
+    "typescript"
+  ],
   "author": "Victor Glindås",
   "license": "MIT",
   "bugs": {
@@ -25,21 +30,21 @@
   },
   "devDependencies": {
     "@types/html-webpack-plugin": "2.30.3",
-    "@types/node": "9.6.0",
-    "@types/three": "0.91.0",
-    "@types/webpack": "4.1.2",
+    "@types/node": "9.6.2",
+    "@types/three": "0.91.6",
+    "@types/webpack": "4.1.3",
     "css-loader": "0.28.11",
-    "html-webpack-plugin": "3.1.0",
-    "node-sass": "4.7.2",
+    "html-webpack-plugin": "3.2.0",
+    "node-sass": "4.8.3",
     "sass-loader": "6.0.7",
     "style-loader": "0.20.3",
-    "ts-loader": "4.1.0",
+    "ts-loader": "4.2.0",
     "ts-node": "5.0.1",
-    "tslint": "^5.9.1",
-    "tslint-config-prettier": "^1.10.0",
-    "typescript": "2.7.2",
-    "webpack": "4.2.0",
-    "webpack-cli": "2.0.13",
-    "webpack-dev-server": "3.1.1"
+    "tslint": "5.9.1",
+    "tslint-config-prettier": "1.10.0",
+    "typescript": "2.8.1",
+    "webpack": "4.5.0",
+    "webpack-cli": "2.0.14",
+    "webpack-dev-server": "3.1.3"
   }
 }
