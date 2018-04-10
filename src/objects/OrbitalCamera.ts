@@ -8,9 +8,9 @@ import {
   touchesDeltaDistance
 } from "../helpers/EventHelper";
 import clamp from "../math/clamp";
-import Pan from "./Pan";
-import Rotation from "./Rotation";
-import Zoom from "./Zoom";
+import Pan from "./camera/Pan";
+import Rotation from "./camera/Rotation";
+import Zoom from "./camera/Zoom";
 
 export default class OrbitalCamera extends PerspectiveCamera {
   public distance = 100;
