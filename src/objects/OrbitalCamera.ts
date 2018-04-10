@@ -8,13 +8,14 @@ import {
   touchesDeltaDistance
 } from "../helpers/EventHelper";
 import clamp from "../math/clamp";
+import Zoom from "./Zoom";
 
 const MAGNITUDE_ROTATION = 0.004;
 const MAGNITUDE_PANNING = 0.004;
-const MAGNITUDE_ZOOM = 0.004;
 
 export default class OrbitalCamera extends PerspectiveCamera {
   public distance = 100;
+  public zoomValue = new Zoom(this.zoom);
 
   private eventElement?: HTMLElement;
   private centerPoint = new Vector3();
@@ -22,17 +23,6 @@ export default class OrbitalCamera extends PerspectiveCamera {
   private rotationY = 0;
   private panX = 0;
   private panY = 0;
-  private zoomPvt: number;
-  private zoomMin = 1;
-  private zoomMax = 4;
-
-  get zoom() {
-    return this.zoomPvt;
-  }
-
-  set zoom(value: number) {
-    this.zoomPvt = clamp(value, this.zoomMin, this.zoomMax);
-  }
 
   constructor() {
     super();
@@ -81,7 +71,8 @@ export default class OrbitalCamera extends PerspectiveCamera {
     if (event.detail) {
       delta = event.detail;
     }
-    this.zoom += delta * MAGNITUDE_ZOOM;
+    this.zoomValue.set(this.zoomValue.get() + delta * Zoom.magnitude);
+    this.zoom = this.zoomValue.get();
     this.updateProjectionMatrix();
   };
 
@@ -98,7 +89,7 @@ export default class OrbitalCamera extends PerspectiveCamera {
     const panCompoundX = this.panX;
     const panCompoundY = this.panY;
 
-    const zoomCompound = this.zoom;
+    const zoomCompound = this.zoomValue.get();
 
     const onMoveEvent = (moveEvent: any) => {
       const move = eventByType(moveEvent);
@@ -110,7 +101,8 @@ export default class OrbitalCamera extends PerspectiveCamera {
           startEvent.touches,
           moveEvent.touches
         );
-        this.zoom = zoomCompound - delta * MAGNITUDE_ZOOM;
+        this.zoomValue.set(zoomCompound - delta * Zoom.magnitude);
+        this.zoom = this.zoomValue.get();
       }
 
       if (touches === 2 || moveEvent.button === 1) {
