@@ -112,12 +112,12 @@ export default class OrbitalCamera extends PerspectiveCamera {
     };
 
     const onEventEnd = () => {
-      document.removeEventListener(moveType, onMoveEvent);
-      document.removeEventListener(endType, onEventEnd);
+      removeEventListener(moveType, onMoveEvent);
+      removeEventListener(endType, onEventEnd);
     };
 
-    document.addEventListener(moveType, onMoveEvent);
-    document.addEventListener(endType, onEventEnd);
+    addEventListener(moveType, onMoveEvent);
+    addEventListener(endType, onEventEnd);
   };
 
   private correctCameraUpVector() {
