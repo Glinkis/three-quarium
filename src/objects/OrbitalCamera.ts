@@ -8,21 +8,20 @@ import {
   touchesDeltaDistance
 } from "../helpers/EventHelper";
 import clamp from "../math/clamp";
+import Pan from "./Pan";
 import Zoom from "./Zoom";
 
 const MAGNITUDE_ROTATION = 0.004;
-const MAGNITUDE_PANNING = 0.004;
 
 export default class OrbitalCamera extends PerspectiveCamera {
   public distance = 100;
-  public zoomValue = new Zoom(this.zoom);
+  public zoomer = new Zoom(this.zoom);
+  public panner = new Pan(0, 0);
 
   private eventElement?: HTMLElement;
   private centerPoint = new Vector3();
   private rotationX = 0;
   private rotationY = 0;
-  private panX = 0;
-  private panY = 0;
 
   constructor() {
     super();
@@ -41,8 +40,8 @@ export default class OrbitalCamera extends PerspectiveCamera {
     this.correctCameraUpVector();
 
     this.lookAt(this.centerPoint);
-    this.translateX(-this.panX);
-    this.translateY(this.panY);
+    this.translateX(-this.panner.x);
+    this.translateY(this.panner.y);
   }
 
   public setEventElement(element: HTMLElement) {
@@ -71,8 +70,8 @@ export default class OrbitalCamera extends PerspectiveCamera {
     if (event.detail) {
       delta = event.detail;
     }
-    this.zoomValue.set(this.zoomValue.get() + delta * Zoom.magnitude);
-    this.zoom = this.zoomValue.get();
+    this.zoomer.value += delta * Zoom.magnitude;
+    this.zoom = this.zoomer.value;
     this.updateProjectionMatrix();
   };
 
@@ -86,10 +85,10 @@ export default class OrbitalCamera extends PerspectiveCamera {
     const rotationCompoundX = this.rotationX;
     const rotationCompoundY = this.rotationY;
 
-    const panCompoundX = this.panX;
-    const panCompoundY = this.panY;
+    const panCompoundX = this.panner.x;
+    const panCompoundY = this.panner.y;
 
-    const zoomCompound = this.zoomValue.get();
+    const zoomCompound = this.zoomer.value;
 
     const onMoveEvent = (moveEvent: any) => {
       const move = eventByType(moveEvent);
@@ -101,13 +100,13 @@ export default class OrbitalCamera extends PerspectiveCamera {
           startEvent.touches,
           moveEvent.touches
         );
-        this.zoomValue.set(zoomCompound - delta * Zoom.magnitude);
-        this.zoom = this.zoomValue.get();
+        this.zoomer.value = zoomCompound - delta * Zoom.magnitude;
+        this.zoom = this.zoomer.value;
       }
 
       if (touches === 2 || moveEvent.button === 1) {
-        this.panX = panCompoundX + movementDelta.x * MAGNITUDE_PANNING * 2;
-        this.panY = panCompoundY + movementDelta.y * MAGNITUDE_PANNING * 2;
+        this.panner.x = panCompoundX + movementDelta.x * Pan.magnitude * 2;
+        this.panner.y = panCompoundY + movementDelta.y * Pan.magnitude * 2;
       }
 
       if (touches === 1 || moveEvent.button === 0) {
