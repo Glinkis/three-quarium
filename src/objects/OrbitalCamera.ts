@@ -9,19 +9,17 @@ import {
 } from "../helpers/EventHelper";
 import clamp from "../math/clamp";
 import Pan from "./Pan";
+import Rotation from "./Rotation";
 import Zoom from "./Zoom";
-
-const MAGNITUDE_ROTATION = 0.004;
 
 export default class OrbitalCamera extends PerspectiveCamera {
   public distance = 100;
   public zoomer = new Zoom(this.zoom);
-  public panner = new Pan(0, 0);
+  public panner = new Pan();
+  public rotator = new Rotation();
 
   private eventElement?: HTMLElement;
   private centerPoint = new Vector3();
-  private rotationX = 0;
-  private rotationY = 0;
 
   constructor() {
     super();
@@ -32,8 +30,8 @@ export default class OrbitalCamera extends PerspectiveCamera {
     this.position.copy(
       positionAround(
         this.centerPoint,
-        this.rotationX,
-        this.rotationY
+        this.rotator.x,
+        this.rotator.y
       ).multiplyScalar(this.distance)
     );
 
@@ -82,8 +80,8 @@ export default class OrbitalCamera extends PerspectiveCamera {
     const moveType = eventMoveByType(startEvent);
     const endType = eventEndByType(startEvent);
 
-    const rotationCompoundX = this.rotationX;
-    const rotationCompoundY = this.rotationY;
+    const rotationCompoundX = this.rotator.x;
+    const rotationCompoundY = this.rotator.y;
 
     const panCompoundX = this.panner.x;
     const panCompoundY = this.panner.y;
@@ -110,10 +108,10 @@ export default class OrbitalCamera extends PerspectiveCamera {
       }
 
       if (touches === 1 || moveEvent.button === 0) {
-        this.rotationX = rotationCompoundX;
-        this.rotationX += movementDelta.x * MAGNITUDE_ROTATION;
-        this.rotationY = rotationCompoundY;
-        this.rotationY += movementDelta.y * MAGNITUDE_ROTATION;
+        this.rotator.x = rotationCompoundX;
+        this.rotator.x += movementDelta.x * Rotation.magnitude;
+        this.rotator.y = rotationCompoundY;
+        this.rotator.y += movementDelta.y * Rotation.magnitude;
       }
 
       this.update();
@@ -130,13 +128,13 @@ export default class OrbitalCamera extends PerspectiveCamera {
 
   private correctCameraUpVector() {
     this.up = this.centerPoint.clone();
-    this.up.y += Math.cos(this.rotationY);
+    this.up.y += Math.cos(this.rotator.y);
 
-    const vertical = Math.abs(this.rotationY % Math.PI) - Math.PI / 2;
+    const vertical = Math.abs(this.rotator.y % Math.PI) - Math.PI / 2;
 
     if (vertical < 0.5 && vertical > -0.5) {
-      this.up.x -= Math.cos(this.rotationX) * this.position.y;
-      this.up.z -= Math.sin(this.rotationX) * this.position.y;
+      this.up.x -= Math.cos(this.rotator.x) * this.position.y;
+      this.up.z -= Math.sin(this.rotator.x) * this.position.y;
     }
   }
 }
