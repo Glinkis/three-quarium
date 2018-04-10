@@ -87,7 +87,7 @@ export default class OrbitalCamera extends PerspectiveCamera {
     const onMoveEvent = (moveEvent: any) => {
       const move = eventByType(moveEvent);
       const touches = moveEvent.touches ? moveEvent.touches.length : 0;
-      const movementDelta = eventDeltaMovement(start, move);
+      const movement = eventDeltaMovement(start, move);
 
       if (touches === 2) {
         const delta = touchesDeltaDistance(
@@ -99,13 +99,13 @@ export default class OrbitalCamera extends PerspectiveCamera {
       }
 
       if (touches === 2 || moveEvent.button === 1) {
-        this.panner.x = pan.x + movementDelta.x * Pan.magnitude * 2;
-        this.panner.y = pan.y + movementDelta.y * Pan.magnitude * 2;
+        this.panner.x = pan.x + movement.x * Pan.magnitude;
+        this.panner.y = pan.y + movement.y * Pan.magnitude;
       }
 
       if (touches === 1 || moveEvent.button === 0) {
-        this.rotator.x = rotation.x + movementDelta.x * Rotation.magnitude;
-        this.rotator.y = rotation.x + movementDelta.y * Rotation.magnitude;
+        this.rotator.x = rotation.x + movement.x * Rotation.magnitude;
+        this.rotator.y = rotation.x + movement.y * Rotation.magnitude;
       }
 
       this.update();

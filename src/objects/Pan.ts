@@ -1,5 +1,5 @@
 export default class Pan {
-  public static magnitude = 0.004;
+  public static magnitude = 0.008;
   public x: number;
   public y: number;
 
