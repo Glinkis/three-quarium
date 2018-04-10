@@ -1,4 +1,4 @@
-import { PerspectiveCamera, Vector3 } from "three";
+import { PerspectiveCamera, Vector2, Vector3 } from "three";
 import positionAround from "../extensions/THREE.Vector3/positionAround";
 import {
   eventByType,
@@ -14,12 +14,12 @@ import Zoom from "./Zoom";
 
 export default class OrbitalCamera extends PerspectiveCamera {
   public distance = 100;
-  public zoomer = new Zoom(this.zoom);
-  public panner = new Pan();
-  public rotator = new Rotation();
 
-  private eventElement?: HTMLElement;
+  private zoomer = new Zoom(this.zoom);
+  private panner = new Pan();
+  private rotator = new Rotation();
   private centerPoint = new Vector3();
+  private eventElement?: HTMLElement;
 
   constructor() {
     super();
@@ -80,13 +80,9 @@ export default class OrbitalCamera extends PerspectiveCamera {
     const moveType = eventMoveByType(startEvent);
     const endType = eventEndByType(startEvent);
 
-    const rotationCompoundX = this.rotator.x;
-    const rotationCompoundY = this.rotator.y;
-
-    const panCompoundX = this.panner.x;
-    const panCompoundY = this.panner.y;
-
-    const zoomCompound = this.zoomer.value;
+    const rotation = this.rotator.copy();
+    const pan = this.panner.copy();
+    const zoom = this.zoomer.value;
 
     const onMoveEvent = (moveEvent: any) => {
       const move = eventByType(moveEvent);
@@ -98,20 +94,18 @@ export default class OrbitalCamera extends PerspectiveCamera {
           startEvent.touches,
           moveEvent.touches
         );
-        this.zoomer.value = zoomCompound - delta * Zoom.magnitude;
+        this.zoomer.value = zoom - delta * Zoom.magnitude;
         this.zoom = this.zoomer.value;
       }
 
       if (touches === 2 || moveEvent.button === 1) {
-        this.panner.x = panCompoundX + movementDelta.x * Pan.magnitude * 2;
-        this.panner.y = panCompoundY + movementDelta.y * Pan.magnitude * 2;
+        this.panner.x = pan.x + movementDelta.x * Pan.magnitude * 2;
+        this.panner.y = pan.y + movementDelta.y * Pan.magnitude * 2;
       }
 
       if (touches === 1 || moveEvent.button === 0) {
-        this.rotator.x = rotationCompoundX;
-        this.rotator.x += movementDelta.x * Rotation.magnitude;
-        this.rotator.y = rotationCompoundY;
-        this.rotator.y += movementDelta.y * Rotation.magnitude;
+        this.rotator.x = rotation.x + movementDelta.x * Rotation.magnitude;
+        this.rotator.y = rotation.x + movementDelta.y * Rotation.magnitude;
       }
 
       this.update();
