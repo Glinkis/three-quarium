@@ -21,31 +21,30 @@ export default class BoundaryLines extends LineSegments {
   private setGeometry() {
     const half = this.size * 0.5;
     this.geometry = new Geometry();
-    this.geometry.vertices.push(
+    const points = [
       new Vector3(-half, -half, -half),
       new Vector3(-half, half, -half),
-      new Vector3(-half, half, -half),
-      new Vector3(half, half, -half),
       new Vector3(half, half, -half),
       new Vector3(half, -half, -half),
-      new Vector3(half, -half, -half),
-      new Vector3(-half, -half, -half),
       new Vector3(-half, -half, half),
       new Vector3(-half, half, half),
-      new Vector3(-half, half, half),
       new Vector3(half, half, half),
-      new Vector3(half, half, half),
-      new Vector3(half, -half, half),
-      new Vector3(half, -half, half),
-      new Vector3(-half, -half, half),
-      new Vector3(-half, -half, -half),
-      new Vector3(-half, -half, half),
-      new Vector3(-half, half, -half),
-      new Vector3(-half, half, half),
-      new Vector3(half, half, -half),
-      new Vector3(half, half, half),
-      new Vector3(half, -half, -half),
       new Vector3(half, -half, half)
+    ];
+    // prettier-ignore
+    this.geometry.vertices.push(
+      points[0], points[1],
+      points[1], points[2],
+      points[2], points[3],
+      points[3], points[0],
+      points[4], points[5],
+      points[5], points[6],
+      points[6], points[7],
+      points[7], points[4],
+      points[0], points[4],
+      points[1], points[5],
+      points[2], points[6],
+      points[3], points[7]
     );
   }
 }
