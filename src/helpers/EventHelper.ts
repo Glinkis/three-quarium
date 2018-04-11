@@ -1,5 +1,3 @@
-const DISTANCE_THRESHOLD = 4;
-
 export function eventByType(event: MouseEvent | TouchEvent, touchIndex = 0) {
   return event instanceof MouseEvent ? event : event.touches[touchIndex];
 }

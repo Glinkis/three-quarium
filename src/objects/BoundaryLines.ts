@@ -20,7 +20,6 @@ export default class BoundaryLines extends LineSegments {
 
   private setGeometry() {
     const half = this.size * 0.5;
-    this.geometry = new Geometry();
     const points = [
       new Vector3(-half, -half, -half),
       new Vector3(-half, half, -half),
@@ -31,8 +30,9 @@ export default class BoundaryLines extends LineSegments {
       new Vector3(half, half, half),
       new Vector3(half, -half, half)
     ];
+    this.geometry = new Geometry();
     // prettier-ignore
-    this.geometry.vertices.push(
+    this.geometry.vertices = [
       points[0], points[1],
       points[1], points[2],
       points[2], points[3],
@@ -45,6 +45,6 @@ export default class BoundaryLines extends LineSegments {
       points[1], points[5],
       points[2], points[6],
       points[3], points[7]
-    );
+    ];
   }
 }

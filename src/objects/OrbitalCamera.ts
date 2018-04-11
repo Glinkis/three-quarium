@@ -1,4 +1,4 @@
-import { PerspectiveCamera, Vector2, Vector3 } from "three";
+import { PerspectiveCamera, Vector3 } from "three";
 import positionAround from "../extensions/THREE.Vector3/positionAround";
 import {
   eventByType,
@@ -7,7 +7,6 @@ import {
   eventMoveByType,
   touchesDeltaDistance
 } from "../helpers/EventHelper";
-import clamp from "../math/clamp";
 import Pan from "./camera/Pan";
 import Rotation from "./camera/Rotation";
 import Zoom from "./camera/Zoom";

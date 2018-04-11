@@ -29,7 +29,7 @@ export default class Trail extends Line {
 
   private update = () => {
     if (this.geometry instanceof BufferGeometry) {
-      throw new Error("Wrong geometry type.");
+      throw new TypeError(`${this.geometry} is not of type Geometry.`);
     }
 
     requestAnimationFrame(this.update);
