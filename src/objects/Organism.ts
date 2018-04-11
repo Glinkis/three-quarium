@@ -72,14 +72,21 @@ export default class Organism extends Mesh {
     if (thought <= 5) {
       this.target = this.simulation.getRandomPosition();
       // this.material.color.set(0x000000);
-    } else if (this.target != null) {
-      if (this.position.distanceTo(this.target) > 0.5) {
-        rotateTowards(this, this.target, 0.03);
-        this.translateZ(this.velocity);
-      } else {
-        this.target = null;
-      }
+    } else {
+      this.moveTowardsTarget();
     }
     this.rotateZ((Math.sin(this.rotation.x) + Math.cos(this.rotation.y)) / 10);
+  }
+
+  private moveTowardsTarget() {
+    if (this.target === null) {
+      return;
+    }
+    if (this.position.distanceTo(this.target) > 0.5) {
+      rotateTowards(this, this.target, 0.03);
+      this.translateZ(this.velocity);
+      return;
+    }
+    this.target = null;
   }
 }
