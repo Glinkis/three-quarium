@@ -18,9 +18,9 @@ function initialize() {
   };
 
   const btnAddTen = new UIButton(uiGroup.element);
-  btnAddTen.element.textContent = "Add 10";
+  btnAddTen.element.textContent = "Add 100";
   btnAddTen.onClick = () => {
-    for (let i = 0; i < 10; i++) {
+    for (let i = 0; i < 100; i++) {
       simulation.scene.add(new Organism(simulation));
     }
   };

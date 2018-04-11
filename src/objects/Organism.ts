@@ -1,7 +1,5 @@
 import {
-  BufferGeometry,
   IcosahedronBufferGeometry,
-  Material,
   Mesh,
   MeshBasicMaterial,
   Vector3
@@ -13,13 +11,15 @@ import Simulation from "./Simulation";
 import Trail from "./Trail";
 
 export default class Organism extends Mesh {
-  public geometry = new IcosahedronBufferGeometry(1, 1);
-  public material = new MeshBasicMaterial({ color: 0xf23c55 });
+  private static MATERIAL = new MeshBasicMaterial({ color: 0xf23c55 });
+  private static GEOMETRY = new IcosahedronBufferGeometry(1, 1);
+  private static EYE_MATERIAL = new MeshBasicMaterial({ color: 0x000000 });
+  private static EYE_GEOMETRY = new IcosahedronBufferGeometry(0.4, 0);
+
   public trail: Trail;
 
   private velocity = 0.25;
   private simulation: Simulation;
-  private age = 0;
   private target: Vector3 | null = null;
 
   constructor(simulation: Simulation) {
@@ -32,16 +32,16 @@ export default class Organism extends Mesh {
 
     this.simulation.scene.add(this.trail);
 
+    this.geometry = Organism.GEOMETRY;
+    this.material = Organism.MATERIAL;
+
     this.buildEyes();
     this.update();
   }
 
   private buildEyes() {
-    const geometry = new IcosahedronBufferGeometry(0.4, 0);
-    const material = new MeshBasicMaterial({ color: 0x000000 });
-
-    const leftEye = new Mesh(geometry, material);
-    const rightEye = new Mesh(geometry, material);
+    const leftEye = new Mesh(Organism.EYE_GEOMETRY, Organism.EYE_MATERIAL);
+    const rightEye = new Mesh(Organism.EYE_GEOMETRY, Organism.EYE_MATERIAL);
 
     this.add(leftEye);
     this.add(rightEye);
@@ -52,7 +52,6 @@ export default class Organism extends Mesh {
 
   private update = () => {
     requestAnimationFrame(this.update);
-    this.age += 1;
     this.think();
     this.clampPositionToBounds();
   };
