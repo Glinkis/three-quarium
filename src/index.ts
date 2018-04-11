@@ -28,7 +28,7 @@ function initialize() {
   const btnClearAll = new UIButton(uiGroup.element);
   btnClearAll.element.textContent = "Clear All";
   btnClearAll.onClick = () => {
-    const organisms = [];
+    const organisms = [] as Organism[];
 
     simulation.scene.traverse(child => {
       if (child instanceof Organism) {

@@ -5,7 +5,7 @@ export default class Zoom {
   public min = 1;
   public max = 4;
   // tslint:disable-next-line:variable-name
-  private _value: number;
+  private _value = 0;
 
   public get value() {
     return this._value;

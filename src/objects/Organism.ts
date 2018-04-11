@@ -13,14 +13,14 @@ import Simulation from "./Simulation";
 import Trail from "./Trail";
 
 export default class Organism extends Mesh {
-  public geometry: BufferGeometry;
-  public material: Material;
+  public geometry = new IcosahedronBufferGeometry(1, 1);
+  public material = new MeshBasicMaterial({ color: 0xf23c55 });
+  public trail: Trail;
 
   private velocity = 0.25;
   private simulation: Simulation;
-  private age: number;
-  private target: Vector3;
-  private trail: Trail;
+  private age = 0;
+  private target: Vector3 | null = null;
 
   constructor(simulation: Simulation) {
     super();
@@ -32,18 +32,8 @@ export default class Organism extends Mesh {
 
     this.simulation.scene.add(this.trail);
 
-    this.setMaterial();
-    this.setGeometry();
     this.buildEyes();
     this.update();
-  }
-
-  private setMaterial() {
-    this.material = new MeshBasicMaterial({ color: 0xf23c55 });
-  }
-
-  private setGeometry() {
-    this.geometry = new IcosahedronBufferGeometry(1, 1);
   }
 
   private buildEyes() {
