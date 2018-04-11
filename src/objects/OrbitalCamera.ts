@@ -104,8 +104,9 @@ export default class OrbitalCamera extends PerspectiveCamera {
       }
 
       if (touches === 1 || moveEvent.button === 0) {
-        this.rotator.x = rotation.x + movement.x * Rotation.magnitude;
-        this.rotator.y = rotation.x + movement.y * Rotation.magnitude;
+        this.rotator = rotation.copy();
+        this.rotator.x += movement.x * Rotation.magnitude;
+        this.rotator.y += movement.y * Rotation.magnitude;
       }
 
       this.update();
