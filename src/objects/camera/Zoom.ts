@@ -1,18 +1,18 @@
+import createProperty from "../../helpers/createProperty";
 import clamp from "../../math/clamp";
 
 export default class Zoom {
   public static magnitude = 0.004;
   public min = 1;
   public max = 4;
-  // tslint:disable-next-line:variable-name
-  private _value = 0;
 
-  public get value() {
-    return this._value;
-  }
-  public set value(value: number) {
-    this._value = clamp(value, this.min, this.max);
-  }
+  @createProperty<Zoom, number>({
+    set(value, accessor) {
+      accessor.set(clamp(value, this.min, this.max));
+    }
+  })
+  public value = 0;
+
   constructor(value: number) {
     this.value = value;
   }
