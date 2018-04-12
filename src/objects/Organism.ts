@@ -4,8 +4,8 @@ import {
   MeshBasicMaterial,
   Vector3
 } from "three";
-import randomEuler from "../extensions/THREE.Euler/randomEuler";
-import rotateTowards from "../extensions/THREE.Object3D/rotateTowards";
+import randomEuler from "../extensions/Euler/randomEuler";
+import rotateTowards from "../extensions/Object3D/rotateTowards";
 import clamp from "../math/clamp";
 import Simulation from "./Simulation";
 import Trail from "./Trail";

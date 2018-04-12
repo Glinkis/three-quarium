@@ -1,5 +1,5 @@
 import { PerspectiveCamera, Vector3 } from "three";
-import positionAround from "../extensions/THREE.Vector3/positionAround";
+import positionAround from "../extensions/Vector3/positionAround";
 import {
   eventByType,
   eventDeltaMovement,
