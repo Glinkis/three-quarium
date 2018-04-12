@@ -1,13 +1,10 @@
 import { Geometry, LineDashedMaterial, LineSegments, Vector3 } from "three";
 
 export default class BoundaryLines extends LineSegments {
-  private size: number;
-
   constructor(size: number) {
     super();
-    this.size = size;
     this.setMaterial();
-    this.setGeometry();
+    this.setGeometry(size);
   }
 
   private setMaterial() {
@@ -18,8 +15,8 @@ export default class BoundaryLines extends LineSegments {
     });
   }
 
-  private setGeometry() {
-    const half = this.size * 0.5;
+  private setGeometry(size: number) {
+    const half = size * 0.5;
     const points = [
       new Vector3(-half, -half, -half),
       new Vector3(-half, half, -half),
