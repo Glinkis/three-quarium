@@ -34,8 +34,7 @@ function initialize() {
     });
 
     organisms.forEach(organism => {
-      simulation.scene.remove(organism);
-      simulation.scene.remove(organism.trail);
+      organism.remove(simulation.scene);
     });
   };
 }

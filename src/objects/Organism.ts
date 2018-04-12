@@ -2,6 +2,7 @@ import {
   IcosahedronBufferGeometry,
   Mesh,
   MeshBasicMaterial,
+  Object3D,
   Vector3
 } from "three";
 import randomEuler from "../extensions/Euler/randomEuler";
@@ -38,6 +39,11 @@ export default class Organism extends Mesh {
     this.buildEyes();
 
     this.onBeforeRender = this.update;
+  }
+
+  public remove(topNode: Object3D) {
+    topNode.remove(this);
+    topNode.remove(this.trail);
   }
 
   private buildEyes() {
