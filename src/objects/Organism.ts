@@ -36,7 +36,8 @@ export default class Organism extends Mesh {
     this.material = MATERIAL;
 
     this.buildEyes();
-    this.update();
+
+    this.onBeforeRender = this.update;
   }
 
   private buildEyes() {
@@ -50,11 +51,10 @@ export default class Organism extends Mesh {
     rightEye.position.set(-0.5, 0, 0.8);
   }
 
-  private update = () => {
-    requestAnimationFrame(this.update);
+  private update() {
     this.think();
     this.clampPositionToBounds();
-  };
+  }
 
   private clampPositionToBounds() {
     const bounds = this.simulation.size * 0.5;

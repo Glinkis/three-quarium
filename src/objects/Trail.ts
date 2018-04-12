@@ -10,15 +10,15 @@ export default class Trail extends Line {
   constructor(target: Vector3) {
     super();
     this.target = target;
+
     this.material = TRAIL_MATERIAL;
     this.geometry = new TrailGeometry();
-
     this.geometry.build(this.target);
-    this.update();
+
+    this.onBeforeRender = this.update;
   }
 
-  private update = () => {
-    requestAnimationFrame(this.update);
+  public update() {
     this.geometry.update(this.target);
-  };
+  }
 }
