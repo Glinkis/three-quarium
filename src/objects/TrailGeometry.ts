@@ -1,7 +1,8 @@
 import { Geometry, Vector3 } from "three";
 
 export default class TrailGeometry extends Geometry {
-  public build(target: Vector3) {
+  constructor(target: Vector3) {
+    super();
     this.vertices.length = 32;
     this.vertices.fill(target.clone());
   }

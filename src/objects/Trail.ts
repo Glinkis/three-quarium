@@ -12,8 +12,7 @@ export default class Trail extends Line {
     this.target = target;
 
     this.material = TRAIL_MATERIAL;
-    this.geometry = new TrailGeometry();
-    this.geometry.build(this.target);
+    this.geometry = new TrailGeometry(this.target);
 
     this.onBeforeRender = this.update;
   }
