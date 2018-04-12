@@ -9,25 +9,22 @@ function initialize() {
   const simulation = new Simulation();
   simulation.scene.add(new Bounds(simulation.size));
 
-  const uiGroup = new UIGroup(simulation.element);
-
-  const btnAddOne = new UIButton(uiGroup.element);
-  btnAddOne.element.textContent = "Add 1";
-  btnAddOne.onClick = () => {
-    simulation.scene.add(new Organism(simulation));
-  };
-
-  const btnAddTen = new UIButton(uiGroup.element);
-  btnAddTen.element.textContent = "Add 100";
-  btnAddTen.onClick = () => {
-    for (let i = 0; i < 100; i++) {
+  const addOrganisms = (amount: number) => {
+    for (let i = 0; i < amount; i++) {
       simulation.scene.add(new Organism(simulation));
     }
   };
 
-  const btnClearAll = new UIButton(uiGroup.element);
-  btnClearAll.element.textContent = "Clear All";
-  btnClearAll.onClick = () => {
+  const group = new UIGroup(simulation.element);
+
+  const addOne = new UIButton(group.element, ["Add 1"]);
+  addOne.onClick = () => addOrganisms(1);
+
+  const addTen = new UIButton(group.element, ["Add 100"]);
+  addTen.onClick = () => addOrganisms(100);
+
+  const clearAll = new UIButton(group.element, ["Clear All"]);
+  clearAll.onClick = () => {
     const organisms = [] as Organism[];
 
     simulation.scene.traverse(child => {
