@@ -1,10 +1,12 @@
 import { Geometry, LineDashedMaterial, LineSegments, Vector3 } from "three";
+import { CUBE_CORNER_POINTS, cubePathFromCorners } from "../helpers/cubeShape";
 
 export default class BoundaryLines extends LineSegments {
   constructor(size: number) {
     super();
     this.setMaterial();
     this.setGeometry(size);
+    this.computeLineDistances();
   }
 
   private setMaterial() {
@@ -16,32 +18,12 @@ export default class BoundaryLines extends LineSegments {
   }
 
   private setGeometry(size: number) {
-    const half = size * 0.5;
-    const points = [
-      new Vector3(-half, -half, -half),
-      new Vector3(-half, half, -half),
-      new Vector3(half, half, -half),
-      new Vector3(half, -half, -half),
-      new Vector3(-half, -half, half),
-      new Vector3(-half, half, half),
-      new Vector3(half, half, half),
-      new Vector3(half, -half, half)
-    ];
     this.geometry = new Geometry();
     // prettier-ignore
-    this.geometry.vertices = [
-      points[0], points[1],
-      points[1], points[2],
-      points[2], points[3],
-      points[3], points[0],
-      points[4], points[5],
-      points[5], points[6],
-      points[6], points[7],
-      points[7], points[4],
-      points[0], points[4],
-      points[1], points[5],
-      points[2], points[6],
-      points[3], points[7]
-    ];
+    const corners = CUBE_CORNER_POINTS
+      .map(p => new Vector3().copy(p))
+      .map(p => p.multiplyScalar(size * 0.5));
+
+    this.geometry.vertices = cubePathFromCorners(corners);
   }
 }
