@@ -1,3 +1,4 @@
+import { disposeHierarchy } from "./extensions/Object3D/dispose";
 import "./index.scss";
 import Bounds from "./objects/BoundaryLines";
 import Organism from "./objects/Organism";
@@ -34,7 +35,7 @@ function initialize() {
     });
 
     organisms.forEach(organism => {
-      organism.remove(simulation.scene);
+      disposeHierarchy(organism);
     });
   };
 }
