@@ -56,15 +56,13 @@ export default class OrbitalCamera extends PerspectiveCamera {
     event.preventDefault();
     let delta = 0;
     if (event.wheelDelta) {
-      delta = Number(event.wheelDelta);
+      delta = Number(-event.wheelDelta);
     } else if (event.deltaY) {
       delta = -event.deltaY;
     } else if (event.detail) {
       delta = event.detail;
     }
-    this.zoomer.value += delta * Zoom.magnitude;
-    this.zoom = this.zoomer.value;
-    this.updateProjectionMatrix();
+    this.updateZoomer(this.zoom, delta);
   };
 
   private onMouseDown = (mouseDown: MouseEvent) => {
@@ -130,6 +128,7 @@ export default class OrbitalCamera extends PerspectiveCamera {
   private updateZoomer(zoom: number, delta: number) {
     this.zoomer.value = zoom - delta * Zoom.magnitude;
     this.zoom = this.zoomer.value;
+    this.updateProjectionMatrix();
   }
 
   private updateRotator(rotation: Rotation, movement: Vector2) {
