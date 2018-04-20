@@ -8,7 +8,7 @@ export default class UIButton extends UIComponent {
   constructor(parent: HTMLElement, children: UIChild[] = []) {
     super(parent, children);
     this.element.classList.add("ui-button");
-    this.element.addEventListener("click", this.onMouseDown);
+    this.element.addEventListener("mousedown", this.onMouseDown);
     this.element.addEventListener("touchstart", this.onTouchStart);
   }
 
