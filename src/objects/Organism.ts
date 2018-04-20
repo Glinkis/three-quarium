@@ -53,8 +53,11 @@ export default class Organism extends Mesh {
   }
 
   private clampPositionToBounds() {
+    if (!this.geometry.boundingBox) {
+      this.geometry.computeBoundingBox();
+    }
+
     const bounds = this.simulation.size * 0.5;
-    this.geometry.computeBoundingBox();
     const { min, max } = this.geometry.boundingBox;
 
     this.position.x = clamp(this.position.x, -bounds + max.x, bounds + min.x);
