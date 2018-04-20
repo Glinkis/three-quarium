@@ -5,14 +5,16 @@ export default class Simulation {
   public size = 50;
   public scene = new Scene();
   public element = document.createElement("div");
-  public renderer = new WebGLRenderer({ antialias: true, alpha: true });
+  public renderer = new WebGLRenderer({
+    alpha: true,
+    antialias: true,
+    devicePixelRatio: window.devicePixelRatio
+  });
   private camera = new OrbitalPerspectiveCamera();
 
   constructor() {
     this.element.id = "three-quarium";
     document.body.appendChild(this.element);
-
-    this.renderer.setPixelRatio(window.devicePixelRatio);
     this.element.appendChild(this.renderer.domElement);
 
     this.scene.fog = new Fog(0x000000, 0, this.size * 7.5);
