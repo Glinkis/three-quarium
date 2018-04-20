@@ -8,6 +8,11 @@ export default class Pan {
     this.y = y;
   }
 
+  public set(pan: Pan) {
+    this.x = pan.x;
+    this.y = pan.y;
+  }
+
   public copy() {
     return new Pan(this.x, this.y);
   }

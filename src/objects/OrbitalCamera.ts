@@ -1,10 +1,7 @@
-import { PerspectiveCamera, Vector3 } from "three";
+import { PerspectiveCamera, Vector2, Vector3 } from "three";
 import positionAround from "../extensions/Vector3/positionAround";
 import {
-  eventByType,
   eventDeltaMovement,
-  eventEndByType,
-  eventMoveByType,
   touchesDeltaDistance
 } from "../helpers/EventHelper";
 import Pan from "./camera/Pan";
@@ -34,7 +31,7 @@ export default class OrbitalCamera extends PerspectiveCamera {
       ).multiplyScalar(this.distance)
     );
 
-    this.correctCameraUpVector();
+    this.updateUpVector();
 
     this.lookAt(this.centerPoint);
     this.translateX(-this.panner.x);
@@ -43,13 +40,13 @@ export default class OrbitalCamera extends PerspectiveCamera {
 
   public setEventElement(element: HTMLElement) {
     if (this.eventElement != null) {
-      this.eventElement.removeEventListener("mousedown", this.onStartEvent);
-      this.eventElement.removeEventListener("touchstart", this.onStartEvent);
+      this.eventElement.removeEventListener("mousedown", this.onMouseDown);
+      this.eventElement.removeEventListener("touchstart", this.onTouchStart);
       this.eventElement.removeEventListener("mousewheel", this.onMouseWheel);
     }
 
-    element.addEventListener("mousedown", this.onStartEvent);
-    element.addEventListener("touchstart", this.onStartEvent);
+    element.addEventListener("mousedown", this.onMouseDown);
+    element.addEventListener("touchstart", this.onTouchStart);
     element.addEventListener("mousewheel", this.onMouseWheel);
 
     this.eventElement = element;
@@ -70,55 +67,84 @@ export default class OrbitalCamera extends PerspectiveCamera {
     this.updateProjectionMatrix();
   };
 
-  private onStartEvent = (startEvent: any) => {
-    startEvent.preventDefault();
-
-    const start = eventByType(startEvent);
-    const moveType = eventMoveByType(startEvent);
-    const endType = eventEndByType(startEvent);
+  private onMouseDown = (mouseDown: MouseEvent) => {
+    mouseDown.preventDefault();
 
     const rotation = this.rotator.copy();
     const pan = this.panner.copy();
-    const zoom = this.zoomer.value;
 
-    const onMoveEvent = (moveEvent: any) => {
-      const move = eventByType(moveEvent);
-      const touches = moveEvent.touches ? moveEvent.touches.length : 0;
-      const movement = eventDeltaMovement(start, move);
+    const onMouseMove = (mouseMove: MouseEvent) => {
+      const movement = eventDeltaMovement(mouseDown, mouseMove);
 
-      if (touches === 2) {
-        const delta = touchesDeltaDistance(
-          startEvent.touches,
-          moveEvent.touches
-        );
-        this.zoomer.value = zoom - delta * Zoom.magnitude;
-        this.zoom = this.zoomer.value;
+      if (mouseMove.button === 1) {
+        this.updatePanner(pan, movement);
       }
-
-      if (touches === 2 || moveEvent.button === 1) {
-        this.panner.x = pan.x + movement.x * Pan.magnitude;
-        this.panner.y = pan.y + movement.y * Pan.magnitude;
-      }
-
-      if (touches === 1 || moveEvent.button === 0) {
-        this.rotator = rotation.copy();
-        this.rotator.x += movement.x * Rotation.magnitude;
-        this.rotator.y += movement.y * Rotation.magnitude;
+      if (mouseMove.button === 0) {
+        this.updateRotator(rotation, movement);
       }
 
       this.update();
     };
 
-    const onEventEnd = () => {
-      removeEventListener(moveType, onMoveEvent);
-      removeEventListener(endType, onEventEnd);
+    const onMouseUp = () => {
+      removeEventListener("mousemove", onMouseMove);
+      removeEventListener("mouseup", onMouseUp);
     };
 
-    addEventListener(moveType, onMoveEvent);
-    addEventListener(endType, onEventEnd);
+    addEventListener("mousemove", onMouseMove);
+    addEventListener("mouseup", onMouseUp);
   };
 
-  private correctCameraUpVector() {
+  private onTouchStart = (touchStart: TouchEvent) => {
+    touchStart.preventDefault();
+
+    const rotation = this.rotator.copy();
+    const pan = this.panner.copy();
+    const zoom = this.zoomer.value;
+
+    const onTouchMove = (touchMove: TouchEvent) => {
+      const movement = eventDeltaMovement(touchStart.touches[0], touchMove.touches[0]); // prettier-ignore
+
+      if (touchMove.touches.length === 2) {
+        this.updateZoomer(zoom, touchesDeltaDistance(touchStart, touchMove));
+      }
+      if (touchMove.touches.length === 2) {
+        this.updatePanner(pan, movement);
+      }
+      if (touchMove.touches.length === 1) {
+        this.updateRotator(rotation, movement);
+      }
+
+      this.update();
+    };
+
+    const onTouchEnd = () => {
+      removeEventListener("touchmove", onTouchMove);
+      removeEventListener("touchend", onTouchEnd);
+    };
+
+    addEventListener("touchmove", onTouchMove);
+    addEventListener("touchend", onTouchEnd);
+  };
+
+  private updateZoomer(zoom: number, delta: number) {
+    this.zoomer.value = zoom - delta * Zoom.magnitude;
+    this.zoom = this.zoomer.value;
+  }
+
+  private updateRotator(rotation: Rotation, movement: Vector2) {
+    this.rotator.set(rotation);
+    this.rotator.x += movement.x * Rotation.magnitude;
+    this.rotator.y += movement.y * Rotation.magnitude;
+  }
+
+  private updatePanner(pan: Pan, movement: Vector2) {
+    this.panner.set(pan);
+    this.panner.x += movement.x * Pan.magnitude;
+    this.panner.y += movement.y * Pan.magnitude;
+  }
+
+  private updateUpVector() {
     this.up = this.centerPoint.clone();
     this.up.y += Math.cos(this.rotator.y);
 

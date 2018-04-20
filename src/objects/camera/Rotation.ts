@@ -8,6 +8,11 @@ export default class Rotation {
     this.y = y;
   }
 
+  public set(rotation: Rotation) {
+    this.x = rotation.x;
+    this.y = rotation.y;
+  }
+
   public copy() {
     return new Rotation(this.x, this.y);
   }
