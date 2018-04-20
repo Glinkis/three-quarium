@@ -46,6 +46,22 @@ function initialize() {
     disposables.forEach(disposeHierarchy);
     simulation.renderer.renderLists.dispose();
   };
+
+  const start = new UIButton(group.element, ["Start"]);
+  start.onClick = () => {
+    simulation.start();
+    start.element.style.display = "none";
+    pause.element.style.display = null;
+  };
+
+  const pause = new UIButton(group.element, ["Stop"]);
+  pause.onClick = () => {
+    simulation.stop();
+    pause.element.style.display = "none";
+    start.element.style.display = null;
+  };
+
+  start.element.style.display = "none";
 }
 
 window.addEventListener("load", initialize);

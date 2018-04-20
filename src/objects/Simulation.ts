@@ -11,6 +11,7 @@ export default class Simulation {
     devicePixelRatio: window.devicePixelRatio
   });
   private camera = new OrbitalPerspectiveCamera();
+  private animationFrame?: number;
 
   constructor() {
     this.element.id = "three-quarium";
@@ -27,7 +28,17 @@ export default class Simulation {
     window.addEventListener("resize", this.onResize);
 
     this.onResize();
-    this.render();
+    this.start();
+  }
+
+  public start() {
+    this.animationFrame = requestAnimationFrame(this.render);
+  }
+
+  public stop() {
+    if (this.animationFrame) {
+      cancelAnimationFrame(this.animationFrame);
+    }
   }
 
   public getRandomPosition() {
@@ -40,7 +51,7 @@ export default class Simulation {
   }
 
   private render = () => {
-    requestAnimationFrame(this.render);
+    this.animationFrame = requestAnimationFrame(this.render);
     this.renderer.render(this.scene, this.camera);
   };
 
