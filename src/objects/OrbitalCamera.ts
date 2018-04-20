@@ -59,12 +59,10 @@ export default class OrbitalCamera extends PerspectiveCamera {
     event.preventDefault();
     let delta = 0;
     if (event.wheelDelta) {
-      delta = Number(event.wheelDelta) / -40;
-    }
-    if (event.deltaY) {
+      delta = Number(event.wheelDelta);
+    } else if (event.deltaY) {
       delta = -event.deltaY;
-    }
-    if (event.detail) {
+    } else if (event.detail) {
       delta = event.detail;
     }
     this.zoomer.value += delta * Zoom.magnitude;
