@@ -17,8 +17,6 @@ const EYE_MATERIAL = new MeshBasicMaterial({ color: 0x000000 });
 const EYE_GEOMETRY = new IcosahedronBufferGeometry(0.4, 0);
 
 export default class Organism extends Mesh {
-  public trail: Trail;
-
   private velocity = 0.25;
   private simulation: Simulation;
   private target: Vector3 | null = null;
@@ -29,9 +27,6 @@ export default class Organism extends Mesh {
     this.simulation = simulation;
     this.position.copy(this.simulation.getRandomPosition());
     this.rotation.copy(randomEuler());
-    this.trail = new Trail(this.position);
-
-    this.simulation.scene.add(this.trail);
 
     this.geometry = GEOMETRY;
     this.material = MATERIAL;
@@ -39,11 +34,6 @@ export default class Organism extends Mesh {
     this.buildEyes();
 
     this.onBeforeRender = this.update;
-  }
-
-  public remove(topNode: Object3D) {
-    topNode.remove(this);
-    topNode.remove(this.trail);
   }
 
   private buildEyes() {

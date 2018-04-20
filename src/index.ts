@@ -1,8 +1,10 @@
+import { Object3D } from "three";
 import { disposeHierarchy } from "./extensions/Object3D/dispose";
 import "./index.scss";
 import Bounds from "./objects/BoundaryLines";
 import Organism from "./objects/Organism";
 import Simulation from "./objects/Simulation";
+import Trail from "./objects/Trail";
 import UIButton from "./ui/UIButton";
 import UIGroup from "./ui/UIGroup";
 
@@ -12,7 +14,11 @@ function initialize() {
 
   const addOrganisms = (amount: number) => {
     for (let i = 0; i < amount; i++) {
-      simulation.scene.add(new Organism(simulation));
+      const organism = new Organism(simulation);
+      simulation.scene.add(organism);
+
+      const trail = new Trail(organism.position);
+      simulation.scene.add(trail);
     }
   };
 
@@ -26,17 +32,19 @@ function initialize() {
 
   const clearAll = new UIButton(group.element, ["Clear All"]);
   clearAll.onClick = () => {
-    const organisms = [] as Organism[];
+    const disposables = [] as Object3D[];
 
     simulation.scene.traverse(child => {
       if (child instanceof Organism) {
-        organisms.push(child);
+        disposables.push(child);
+      }
+      if (child instanceof Trail) {
+        disposables.push(child);
       }
     });
 
-    organisms.forEach(organism => {
-      disposeHierarchy(organism);
-    });
+    disposables.forEach(disposeHierarchy);
+    simulation.renderer.renderLists.dispose();
   };
 }
 

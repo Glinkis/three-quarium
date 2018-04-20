@@ -5,7 +5,7 @@ export default class Simulation {
   public size = 50;
   public scene = new Scene();
   public element = document.createElement("div");
-  private renderer = new WebGLRenderer({ antialias: true, alpha: true });
+  public renderer = new WebGLRenderer({ antialias: true, alpha: true });
   private camera = new OrbitalPerspectiveCamera();
 
   constructor() {
