@@ -6,6 +6,9 @@ import {
 } from "three";
 
 export default class TrailGeometry extends BufferGeometry {
+  private next = new Float32Array(3);
+  private swap = new Float32Array(3);
+
   constructor(target: Vector3) {
     super();
     this.addPosition(target);
@@ -27,14 +30,24 @@ export default class TrailGeometry extends BufferGeometry {
     const position = this.getAttribute("position");
 
     const array = position.array;
-    const current = new Float32Array(3);
-    const last = new Float32Array(target.toArray());
+
+    this.next[0] = target.x;
+    this.next[1] = target.y;
+    this.next[2] = target.z;
 
     if (array instanceof Float32Array) {
       for (let i = 0; i < array.length; i += 3) {
-        current.set(array.subarray(i, i + 3));
-        array.set(last, i);
-        last.set(current);
+        this.swap[0] = array[i + 0];
+        this.swap[1] = array[i + 1];
+        this.swap[2] = array[i + 2];
+
+        array[i + 0] = this.next[0];
+        array[i + 1] = this.next[1];
+        array[i + 2] = this.next[2];
+
+        this.next[0] = this.swap[0];
+        this.next[1] = this.swap[1];
+        this.next[2] = this.swap[2];
       }
     }
 
