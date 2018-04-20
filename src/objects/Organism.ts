@@ -2,14 +2,12 @@ import {
   IcosahedronBufferGeometry,
   Mesh,
   MeshBasicMaterial,
-  Object3D,
   Vector3
 } from "three";
 import randomEuler from "../extensions/Euler/randomEuler";
 import rotateTowards from "../extensions/Object3D/rotateTowards";
 import clamp from "../math/clamp";
 import Simulation from "./Simulation";
-import Trail from "./Trail";
 
 const MATERIAL = new MeshBasicMaterial({ color: 0xf23c55 });
 const GEOMETRY = new IcosahedronBufferGeometry(1, 1);
