@@ -27,11 +27,10 @@ export default class TrailGeometry extends BufferGeometry {
     const position = this.getAttribute("position");
 
     const array = position.array;
+    const current = new Float32Array(3);
+    const last = new Float32Array(target.toArray());
 
     if (array instanceof Float32Array) {
-      const current = new Float32Array(3);
-      const last = new Float32Array(target.toArray());
-
       for (let i = 0; i < array.length; i += 3) {
         current.set(array.subarray(i, i + 3));
         array.set(last, i);
