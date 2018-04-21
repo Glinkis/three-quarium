@@ -17,7 +17,7 @@ const EYE_GEOMETRY = new IcosahedronBufferGeometry(0.4, 0);
 export default class Organism extends Mesh {
   private velocity = 0.25;
   private simulation: Simulation;
-  private target: Vector3 | null = null;
+  private target?: Vector3;
 
   constructor(simulation: Simulation) {
     super();
@@ -76,7 +76,7 @@ export default class Organism extends Mesh {
   }
 
   private moveTowardsTarget() {
-    if (this.target === null) {
+    if (!this.target) {
       return;
     }
     if (this.position.distanceTo(this.target) > 0.5) {
@@ -84,6 +84,6 @@ export default class Organism extends Mesh {
       this.translateZ(this.velocity);
       return;
     }
-    this.target = null;
+    delete this.target;
   }
 }
