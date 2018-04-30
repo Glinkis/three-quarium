@@ -28,26 +28,24 @@ export default class TrailGeometry extends BufferGeometry {
 
   private updatePosition(target: Vector3) {
     const position = this.getAttribute("position");
+    if (!(position instanceof BufferAttribute)) {
+      throw new TypeError(`Expected a ${BufferAttribute}.`);
+    }
 
     const array = position.array;
+    if (!(array instanceof Float32Array)) {
+      throw new TypeError(`Expected a ${BufferAttribute}.`);
+    }
 
     this.next[0] = target.x;
     this.next[1] = target.y;
     this.next[2] = target.z;
 
-    if (array instanceof Float32Array) {
-      for (let i = 0; i < array.length; i += 3) {
-        this.swap[0] = array[i + 0];
-        this.swap[1] = array[i + 1];
-        this.swap[2] = array[i + 2];
-
-        array[i + 0] = this.next[0];
-        array[i + 1] = this.next[1];
-        array[i + 2] = this.next[2];
-
-        this.next[0] = this.swap[0];
-        this.next[1] = this.swap[1];
-        this.next[2] = this.swap[2];
+    for (let i = 0; i < array.length; i += 3) {
+      for (let j = 0; j < 3; j++) {
+        this.swap[j] = array[i + j];
+        array[i + j] = this.next[j];
+        this.next[j] = this.swap[j];
       }
     }
 
