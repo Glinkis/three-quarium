@@ -9,9 +9,9 @@ import rotateTowards from "../extensions/Object3D/rotateTowards";
 import clamp from "../math/clamp";
 import Simulation from "./Simulation";
 
-const MATERIAL = new MeshBasicMaterial({ color: 0xf23c55 });
+const MATERIAL = new MeshBasicMaterial({ color: 0xf23c55, name: "Organism" });
 const GEOMETRY = new IcosahedronBufferGeometry(1, 1);
-const EYE_MATERIAL = new MeshBasicMaterial({ color: 0x000000 });
+const EYE_MATERIAL = new MeshBasicMaterial({ color: 0x000000, name: "Eye" });
 const EYE_GEOMETRY = new IcosahedronBufferGeometry(0.4, 0);
 
 export default class Organism extends Mesh {

@@ -1,7 +1,10 @@
 import { Line, LineBasicMaterial, Vector3 } from "three";
 import TrailGeometry from "./TrailGeometry";
 
-const TRAIL_MATERIAL = new LineBasicMaterial({ color: 0x61c791 });
+const TRAIL_MATERIAL = new LineBasicMaterial({
+  color: 0x61c791,
+  name: "Trail"
+});
 
 export default class Trail extends Line {
   public geometry: TrailGeometry;
