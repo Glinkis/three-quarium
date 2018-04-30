@@ -1,7 +1,7 @@
 import { Object3D } from "three";
 import { disposeHierarchy } from "./extensions/Object3D/dispose";
 import "./index.scss";
-import Bounds from "./objects/BoundaryLines";
+import BoundaryLines from "./objects/BoundaryLines";
 import Organism from "./objects/Organism";
 import Simulation from "./objects/Simulation";
 import Trail from "./objects/Trail";
@@ -10,7 +10,7 @@ import UIGroup from "./ui/UIGroup";
 
 function initialize() {
   const simulation = new Simulation();
-  simulation.scene.add(new Bounds(simulation.size));
+  simulation.scene.add(new BoundaryLines(simulation.size));
 
   const addOrganisms = (amount: number) => {
     for (let i = 0; i < amount; i++) {
