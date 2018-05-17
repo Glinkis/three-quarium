@@ -4,6 +4,7 @@ import {
   Float32BufferAttribute,
   Vector3
 } from "three";
+import guardType from "../helpers/guardType";
 
 export default class TrailGeometry extends BufferGeometry {
   private next = new Float32Array(3);
@@ -27,15 +28,8 @@ export default class TrailGeometry extends BufferGeometry {
   }
 
   private updatePosition(target: Vector3) {
-    const position = this.getAttribute("position");
-    if (!(position instanceof BufferAttribute)) {
-      throw new TypeError(`Expected a ${BufferAttribute}.`);
-    }
-
-    const array = position.array;
-    if (!(array instanceof Float32Array)) {
-      throw new TypeError(`Expected a ${BufferAttribute}.`);
-    }
+    const position = guardType(this.getAttribute("position"), BufferAttribute);
+    const array = guardType(position.array, Float32Array);
 
     this.next[0] = target.x;
     this.next[1] = target.y;
@@ -49,8 +43,6 @@ export default class TrailGeometry extends BufferGeometry {
       }
     }
 
-    if (position instanceof BufferAttribute) {
-      position.needsUpdate = true;
-    }
+    position.needsUpdate = true;
   }
 }
