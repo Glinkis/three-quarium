@@ -44,9 +44,9 @@ export default class Simulation {
   public getRandomPosition() {
     const half = this.size * 0.5;
     return new Vector3(
-      Math.random() * (half + half) - half,
-      Math.random() * (half + half) - half,
-      Math.random() * (half + half) - half
+      Math.random() * this.size - half,
+      Math.random() * this.size - half,
+      Math.random() * this.size - half
     );
   }
 
