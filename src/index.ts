@@ -23,15 +23,19 @@ function initialize() {
   };
 
   const group = new UIGroup(simulation.element);
+  group.attach();
 
   const addOne = new UIButton(group.element, ["Add 1"]);
-  addOne.onClick = () => addOrganisms(1);
+  addOne.attach();
+  addOne.addEventListener("click", () => addOrganisms(1));
 
   const addTen = new UIButton(group.element, ["Add 100"]);
-  addTen.onClick = () => addOrganisms(100);
+  addTen.attach();
+  addTen.addEventListener("click", () => addOrganisms(100));
 
   const clearAll = new UIButton(group.element, ["Clear All"]);
-  clearAll.onClick = () => {
+  clearAll.attach();
+  clearAll.addEventListener("click", () => {
     const disposables = [] as Object3D[];
 
     simulation.scene.traverse(child => {
@@ -45,7 +49,7 @@ function initialize() {
 
     disposables.forEach(disposeHierarchy);
     simulation.renderer.renderLists.dispose();
-  };
+  });
 }
 
 window.addEventListener("load", initialize);
