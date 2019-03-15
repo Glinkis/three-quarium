@@ -1,13 +1,6 @@
-import createScopedValue from "./createScopedValue";
-
-interface IAccessor<T> {
-  get(): T;
-  set(value: T): void;
-}
-
 interface IProperty<S, T> {
-  get?(this: S, accessor: IAccessor<T>): T;
-  set?(this: S, value: T, accessor: IAccessor<T>): void;
+  get?(this: S, accessor: Accessor<T>): T;
+  set?(this: S, value: T, accessor: Accessor<T>): void;
 }
 
 /**
@@ -16,7 +9,7 @@ interface IProperty<S, T> {
  */
 export default <S, T>({ get, set }: IProperty<S, T> = {}): any => {
   return (target: S, key: string) => {
-    const accessor = createScopedValue<T>();
+    const accessor = new Accessor<T>();
     Object.defineProperty(target, key, {
       get(): T {
         return get ? get.call(this, accessor) : accessor.get();
@@ -29,3 +22,13 @@ export default <S, T>({ get, set }: IProperty<S, T> = {}): any => {
     });
   };
 };
+
+class Accessor<T> {
+  private value!: T;
+  public get() {
+    return this.value;
+  }
+  public set(value: T) {
+    this.value = value;
+  }
+}
