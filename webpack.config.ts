@@ -4,10 +4,6 @@ import { Configuration } from "webpack";
 // tslint:disable:object-literal-sort-keys
 export default {
   devtool: "source-map",
-  devServer: {
-    port: 8080,
-    host: "0.0.0.0"
-  },
   module: {
     rules: [
       {

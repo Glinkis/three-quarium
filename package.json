@@ -1,4 +1,5 @@
 {
+  "private": true,
   "name": "three-quarium",
   "version": "0.0.0",
   "description": "A simulation of tiny creatures.",
@@ -7,6 +8,7 @@
     "build": "webpack --mode production",
     "dev": "webpack --mode development",
     "start": "webpack-dev-server --mode development",
+    "deploy": "gh-pages -d dist",
     "test": "exit 0"
   },
   "repository": {
@@ -34,6 +36,7 @@
     "@types/three": "0.93.27",
     "@types/webpack": "4.4.25",
     "css-loader": "2.1.1",
+    "gh-pages": "2.0.1",
     "html-webpack-plugin": "3.2.0",
     "node-sass": "4.11.0",
     "sass-loader": "7.1.0",
