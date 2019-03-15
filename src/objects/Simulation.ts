@@ -30,6 +30,10 @@ export default class Simulation {
     this.render();
   }
 
+  public updateSize(size: number) {
+    this.size = size;
+  }
+
   public getRandomPosition() {
     const half = this.size * 0.5;
     return new Vector3(

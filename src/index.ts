@@ -1,7 +1,7 @@
 import { Object3D } from "three";
 import { disposeHierarchy } from "./extensions/Object3D/dispose";
 import "./index.scss";
-import Bounds from "./objects/BoundaryLines";
+import BoundaryLines from "./objects/BoundaryLines";
 import Organism from "./objects/Organism";
 import Simulation from "./objects/Simulation";
 import Trail from "./objects/Trail";
@@ -10,7 +10,8 @@ import UIGroup from "./ui/UIGroup";
 
 function initialize() {
   const simulation = new Simulation();
-  simulation.scene.add(new Bounds(simulation.size));
+  const bounds = new BoundaryLines(simulation.size);
+  simulation.scene.add(bounds);
 
   const addOrganisms = (amount: number) => {
     for (let i = 0; i < amount; i++) {
@@ -24,6 +25,17 @@ function initialize() {
 
   const group = new UIGroup(simulation.element);
   group.attach();
+
+  const setSize = new UIButton(group.element, ["Set size"]);
+  setSize.attach();
+  setSize.addEventListener("click", () => {
+    const size = prompt(`The current size is ${bounds.size}.`);
+
+    if (size != null) {
+      simulation.updateSize(parseFloat(size));
+      bounds.updateSize(parseFloat(size));
+    }
+  });
 
   const addOne = new UIButton(group.element, ["Add 1"]);
   addOne.attach();
