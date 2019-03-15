@@ -6,10 +6,8 @@
   "main": "src/index.ts",
   "scripts": {
     "build": "webpack --mode production",
-    "dev": "webpack --mode development",
     "start": "webpack-dev-server --mode development",
-    "deploy": "gh-pages -d dist",
-    "test": "exit 0"
+    "deploy": "gh-pages -d dist"
   },
   "repository": {
     "type": "git",
