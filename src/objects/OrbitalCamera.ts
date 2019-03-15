@@ -52,17 +52,11 @@ export default class OrbitalCamera extends PerspectiveCamera {
     this.eventElement = element;
   }
 
-  private onMouseWheel = (event: WheelEvent) => {
+  private onMouseWheel = (event: Event) => {
     event.preventDefault();
-    let delta = 0;
-    if (event.wheelDelta) {
-      delta = Number(-event.wheelDelta);
-    } else if (event.deltaY) {
-      delta = -event.deltaY;
-    } else if (event.detail) {
-      delta = event.detail;
+    if (event instanceof WheelEvent) {
+      this.updateZoomer(this.zoom, event.deltaY || event.detail);
     }
-    this.updateZoomer(this.zoom, delta);
   };
 
   private onMouseDown = (mouseDown: MouseEvent) => {

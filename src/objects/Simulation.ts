@@ -7,8 +7,7 @@ export default class Simulation {
   public element = document.createElement("div");
   public renderer = new WebGLRenderer({
     alpha: true,
-    antialias: true,
-    devicePixelRatio: window.devicePixelRatio
+    antialias: true
   });
   private camera = new OrbitalPerspectiveCamera();
 
@@ -24,6 +23,7 @@ export default class Simulation {
     this.camera.update();
     this.scene.add(this.camera);
 
+    this.renderer.setPixelRatio(window.devicePixelRatio);
     window.addEventListener("resize", this.onResize);
 
     this.onResize();
