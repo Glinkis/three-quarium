@@ -14,6 +14,9 @@ const GEOMETRY = new IcosahedronBufferGeometry(1, 1);
 const EYE_MATERIAL = new MeshBasicMaterial({ color: 0x000000 });
 const EYE_GEOMETRY = new IcosahedronBufferGeometry(0.4, 0);
 
+// For collisions.
+GEOMETRY.computeBoundingBox();
+
 export default class Organism extends Mesh {
   private velocity = 0.25;
   private simulation: Simulation;
@@ -51,10 +54,6 @@ export default class Organism extends Mesh {
   }
 
   private clampPositionToBounds() {
-    if (!this.geometry.boundingBox) {
-      this.geometry.computeBoundingBox();
-    }
-
     const bounds = this.simulation.size * 0.5;
     const { min, max } = this.geometry.boundingBox;
 
