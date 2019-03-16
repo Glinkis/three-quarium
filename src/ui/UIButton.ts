@@ -14,7 +14,7 @@ export default class UIButton extends UIComponent<Events> {
       this.element.addEventListener("touchstart", this.onTouchStart);
     });
 
-    this.removeEventListener("detach", () => {
+    this.addEventListener("detach", () => {
       this.element.removeEventListener("mousedown", this.onMouseDown);
       this.element.removeEventListener("touchstart", this.onTouchStart);
     });
