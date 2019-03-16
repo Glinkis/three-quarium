@@ -5,7 +5,7 @@ import UIComponent from "./UIComponent";
 type Events = "click";
 
 export default class UIButton extends UIComponent<Events> {
-  constructor(parent: HTMLElement, children: UIChild[] = []) {
+  constructor(parent: HTMLElement, children?: UIChild[]) {
     super(parent, children);
     this.element.classList.add("ui-button");
 
