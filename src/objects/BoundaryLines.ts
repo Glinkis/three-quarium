@@ -11,15 +11,11 @@ export default class BoundaryLines extends LineSegments {
   }
 
   public updateSize(size: number) {
-    this.geometry = new Geometry();
-    // prettier-ignore
-    const corners = CUBE_CORNER_POINTS
-      .map(p => new Vector3().copy(p))
-      .map(p => p.multiplyScalar(size * 0.5));
-
-    this.geometry.vertices = cubePathFromCorners(corners);
     this.size = size;
-
+    this.geometry = new Geometry();
+    this.geometry.vertices = cubePathFromCorners(
+      CUBE_CORNER_POINTS.map(p => p.clone().multiplyScalar(size * 0.5))
+    );
     this.computeLineDistances();
   }
 
