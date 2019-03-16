@@ -67,7 +67,6 @@ export default class Organism extends Mesh {
 
     if (thought <= 5) {
       this.target = this.simulation.getRandomPosition();
-      // this.material.color.set(0x000000);
     } else {
       this.moveTowardsTarget();
     }
