@@ -95,7 +95,10 @@ export default class OrbitalCamera extends PerspectiveCamera {
     const zoom = this.zoomer.value;
 
     const onTouchMove = (touchMove: TouchEvent) => {
-      const movement = eventDeltaMovement(touchStart.touches[0], touchMove.touches[0]); // prettier-ignore
+      const movement = eventDeltaMovement(
+        touchStart.touches[0],
+        touchMove.touches[0]
+      );
 
       if (touchMove.touches.length === 2) {
         this.updateZoomer(zoom, touchesDeltaDistance(touchStart, touchMove));
