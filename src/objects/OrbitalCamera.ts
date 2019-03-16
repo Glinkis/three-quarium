@@ -99,10 +99,9 @@ export default class OrbitalCamera extends PerspectiveCamera {
 
       if (touchMove.touches.length === 2) {
         this.updateZoomer(zoom, touchesDeltaDistance(touchStart, touchMove));
-      }
-      if (touchMove.touches.length === 2) {
         this.updatePanner(pan, movement);
       }
+
       if (touchMove.touches.length === 1) {
         this.updateRotator(rotation, movement);
       }
