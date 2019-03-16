@@ -7,8 +7,8 @@ export default class Zoom {
   public max = 4;
 
   @createProperty<Zoom, number>({
-    set(value, accessor) {
-      accessor.set(clamp(value, this.min, this.max));
+    set(value) {
+      return clamp(value, this.min, this.max);
     }
   })
   public value = 0;
