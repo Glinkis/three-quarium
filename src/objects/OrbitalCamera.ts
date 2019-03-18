@@ -68,11 +68,12 @@ export default class OrbitalCamera extends PerspectiveCamera {
     const onMouseMove = (mouseMove: MouseEvent) => {
       const movement = eventDeltaMovement(mouseDown, mouseMove);
 
-      if (mouseMove.button === 1) {
-        this.updatePanner(pan, movement);
-      }
       if (mouseMove.button === 0) {
         this.updateRotator(rotation, movement);
+      }
+
+      if (mouseMove.button === 1) {
+        this.updatePanner(pan, movement);
       }
 
       this.update();
@@ -100,13 +101,13 @@ export default class OrbitalCamera extends PerspectiveCamera {
         touchMove.touches[0]
       );
 
+      if (touchMove.touches.length === 1) {
+        this.updateRotator(rotation, movement);
+      }
+
       if (touchMove.touches.length === 2) {
         this.updateZoomer(zoom, touchesDeltaDistance(touchStart, touchMove));
         this.updatePanner(pan, movement);
-      }
-
-      if (touchMove.touches.length === 1) {
-        this.updateRotator(rotation, movement);
       }
 
       this.update();
