@@ -1,4 +1,5 @@
 import * as HtmlWebpackPlugin from "html-webpack-plugin";
+import * as MiniCssExtractPlugin from "mini-css-extract-plugin";
 import { Configuration } from "webpack";
 
 // tslint:disable:object-literal-sort-keys
@@ -15,7 +16,7 @@ export default {
       {
         test: /\.scss$/,
         loaders: [
-          "style-loader",
+          MiniCssExtractPlugin.loader,
           "css-loader?sourceMap",
           "sass-loader?sourceMap"
         ],
@@ -30,9 +31,11 @@ export default {
     extensions: [".ts", ".js", ".scss"]
   },
   plugins: [
+    new MiniCssExtractPlugin(),
     new HtmlWebpackPlugin({
       title: "three-quarium",
-      template: "template.html"
+      template: "template.html",
+      hash: true
     })
   ]
 } as Configuration;

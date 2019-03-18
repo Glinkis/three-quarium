@@ -1,0 +1,9 @@
+$mainColor1: #e0ffb3;
+$mainColor2: #61c791;
+$mainColor3: #31797d;
+$mainColor4: #2a2f36;
+$mainColor5: #f23c55;
+
+@mixin bottom-relief($color) {
+  border-bottom: 2px solid darken($color, 25);
+}
