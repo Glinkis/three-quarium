@@ -1,13 +1,20 @@
-export const disposeHierarchy = (object: any) => {
-  if (object !== null) {
+import { Object3D } from "three";
+
+export const disposeHierarchy = (object?: Object3D) => {
+  if (object) {
     for (const child of object.children) {
       disposeHierarchy(child);
     }
+
     disposeProperty(object, "geometry");
     disposeMaterial(object);
+
+    if (object.parent) {
+      object.parent.remove(object);
+    }
+
+    object.parent = null;
   }
-  object.parent.remove(object);
-  delete object.parent;
 };
 
 const disposeProperty = (object: any, name: string) => {
@@ -28,10 +35,8 @@ const disposeArray = (array: any[], ...names: string[]) => {
 };
 
 const disposeMaterial = (object: any) => {
-  if (Array.isArray(object.material)) {
-    disposeArray(object.material, "map");
-  } else {
-    disposeProperty(object.material, "map");
-  }
+  Array.isArray(object.material)
+    ? disposeArray(object.material, "map")
+    : disposeProperty(object.material, "map");
   disposeProperty(object, "material");
 };

@@ -1,4 +1,4 @@
-import { Geometry, LineDashedMaterial, LineSegments, Vector3 } from "three";
+import { Geometry, LineDashedMaterial, LineSegments } from "three";
 import { CUBE_CORNER_POINTS, cubePathFromCorners } from "../helpers/cubeShape";
 
 export default class BoundaryLines extends LineSegments {
