@@ -41,8 +41,7 @@ export default class Organism extends Mesh {
     const leftEye = new Mesh(EYE_GEOMETRY, EYE_MATERIAL);
     const rightEye = new Mesh(EYE_GEOMETRY, EYE_MATERIAL);
 
-    this.add(leftEye);
-    this.add(rightEye);
+    this.add(leftEye, rightEye);
 
     leftEye.position.set(0.5, 0, 0.8);
     rightEye.position.set(-0.5, 0, 0.8);
