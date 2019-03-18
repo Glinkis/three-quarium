@@ -1,15 +1,15 @@
 import { Vector3 } from "three";
 
-export const CUBE_CORNER_POINTS = Object.freeze([
-  Object.freeze(new Vector3(-1, -1, -1)),
-  Object.freeze(new Vector3(-1, 1, -1)),
-  Object.freeze(new Vector3(1, 1, -1)),
-  Object.freeze(new Vector3(1, -1, -1)),
-  Object.freeze(new Vector3(-1, -1, 1)),
-  Object.freeze(new Vector3(-1, 1, 1)),
-  Object.freeze(new Vector3(1, 1, 1)),
-  Object.freeze(new Vector3(1, -1, 1))
-]);
+export const CUBE_CORNER_POINTS: ReadonlyArray<Vector3> = [
+  new Vector3(-1, -1, -1),
+  new Vector3(-1, 1, -1),
+  new Vector3(1, 1, -1),
+  new Vector3(1, -1, -1),
+  new Vector3(-1, -1, 1),
+  new Vector3(-1, 1, 1),
+  new Vector3(1, 1, 1),
+  new Vector3(1, -1, 1)
+];
 
 // prettier-ignore
 export const cubePathFromCorners = (points: Vector3[]) => [
