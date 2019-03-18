@@ -7,13 +7,13 @@ export default {
   module: {
     rules: [
       {
-        test: /\.(ts|js)$/,
+        test: /\.ts$/,
         loader: "ts-loader",
         options: { compilerOptions: { module: "esnext" } },
         include: /src/
       },
       {
-        test: /\.s?css$/,
+        test: /\.scss$/,
         loaders: [
           "style-loader",
           "css-loader?sourceMap",
