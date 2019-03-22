@@ -1,7 +1,9 @@
-export default class EventEmitter<E> {
-  private eventHandlers = new Map<E, Array<() => void>>();
+type EventHandler = () => void;
 
-  public addEventListener(event: E, handler: () => void) {
+export default class EventEmitter<E> {
+  private eventHandlers = new Map<E, EventHandler[]>();
+
+  public addEventListener(event: E, handler: EventHandler) {
     const handlers = this.eventHandlers.get(event);
     if (handlers) {
       handlers.push(handler);
@@ -10,7 +12,7 @@ export default class EventEmitter<E> {
     }
   }
 
-  public removeEventListener(event: E, handler: () => void) {
+  public removeEventListener(event: E, handler: EventHandler) {
     const handlers = this.eventHandlers.get(event);
     if (handlers) {
       handlers.splice(handlers.indexOf(handler), 1);
@@ -27,7 +29,7 @@ export default class EventEmitter<E> {
     }
   }
 
-  private triggerHandler(handler: () => void) {
+  private triggerHandler(handler: EventHandler) {
     handler();
   }
 }
